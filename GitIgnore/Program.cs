@@ -41,7 +41,7 @@ public class Functions
                     Args = [],
                 }
             );
-            services.AddSingleton<IMiniBot, ExampleMiniBot>();
+            services.AddSingleton<IMiniBot, GitIgnoreMiniBot>();
 
             _services = services.BuildServiceProvider();
 
