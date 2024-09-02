@@ -318,7 +318,7 @@ public class GetConfigurationData
 public class GetConfiguration
 {
     [JsonPropertyName("outputPath")]
-    public string OutputPath { get; set; }
+    public List<string>? OutputPath { get; set; }
 }
 
 public class GetFilesData
