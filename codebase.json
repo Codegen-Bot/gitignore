@@ -1,0 +1,17 @@
+{
+  "targetPath": ".",
+  "installs": [
+    {
+      "botId": "bot://core/output",
+      "botVersion": "1.0.0"
+    },
+    {
+      "botId": "bot://core/filesystem",
+      "botVersion": "1.0.0"
+    },
+    {
+      "botId": "bot://core/log",
+      "botVersion": "1.0.0"
+    }
+  ]
+}
