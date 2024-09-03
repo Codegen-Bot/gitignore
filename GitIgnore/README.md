@@ -1,4 +1,8 @@
-# bot://hub/.gitignore
+# GitIgnore
+
+This is the source code for the bot `bot://hub/.gitignore`.
+
+## How to build
 
 This bot can be built by installing the .NET SDK, then running these commands in the bot directory (the directory that contains `bot.json`):
 

@@ -33,7 +33,7 @@ public class GitIgnoreMiniBot() : IMiniBot
 
             path = Path.GetFullPath(path).Trim('/');
             
-            CodegenBotHost.Log(new LogEvent()
+            Imports.Log(new LogEvent()
             {
                 Level = LogEventLevel.Information, Message = "Adding {Path}",
                 Args = [path]

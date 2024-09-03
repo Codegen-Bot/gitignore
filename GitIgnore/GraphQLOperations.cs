@@ -11,9 +11,7 @@ public static partial class GraphQLOperations
 {
     public static GetConfigurationData GetConfiguration()
     {
-        var variables = new Dictionary<string, object?>();
-
-        var request = new GraphQLRequest
+        var request = new GraphQLRequest<GetConfigurationVariables>
         {
             Query =
                 @"
@@ -24,10 +22,10 @@ public static partial class GraphQLOperations
 },
             ",
             OperationName = "GetConfiguration",
-            Variables = variables,
+            Variables = new GetConfigurationVariables() { },
         };
 
-        var response = CodegenBotHost.GraphQL(request);
+        var response = Imports.GraphQL(request);
         var result = JsonSerializer.Deserialize<GraphQLResponse<GetConfigurationData>>(
             response,
             new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
@@ -37,11 +35,7 @@ public static partial class GraphQLOperations
 
     public static GetFilesData GetFiles(List<string>? whitelist, List<string>? blacklist)
     {
-        var variables = new Dictionary<string, object?>();
-        variables.Add("whitelist", whitelist);
-        variables.Add("blacklist", blacklist);
-
-        var request = new GraphQLRequest
+        var request = new GraphQLRequest<GetFilesVariables>
         {
             Query =
                 @"
@@ -53,10 +47,10 @@ public static partial class GraphQLOperations
 },
             ",
             OperationName = "GetFiles",
-            Variables = variables,
+            Variables = new GetFilesVariables() { Whitelist = whitelist, Blacklist = blacklist },
         };
 
-        var response = CodegenBotHost.GraphQL(request);
+        var response = Imports.GraphQL(request);
         var result = JsonSerializer.Deserialize<GraphQLResponse<GetFilesData>>(
             response,
             new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
@@ -66,10 +60,7 @@ public static partial class GraphQLOperations
 
     public static GetFileContentsData GetFileContents(string textFilePath)
     {
-        var variables = new Dictionary<string, object?>();
-        variables.Add("textFilePath", textFilePath);
-
-        var request = new GraphQLRequest
+        var request = new GraphQLRequest<GetFileContentsVariables>
         {
             Query =
                 @"
@@ -78,10 +69,10 @@ public static partial class GraphQLOperations
 },
             ",
             OperationName = "GetFileContents",
-            Variables = variables,
+            Variables = new GetFileContentsVariables() { TextFilePath = textFilePath },
         };
 
-        var response = CodegenBotHost.GraphQL(request);
+        var response = Imports.GraphQL(request);
         var result = JsonSerializer.Deserialize<GraphQLResponse<GetFileContentsData>>(
             response,
             new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
@@ -91,11 +82,7 @@ public static partial class GraphQLOperations
 
     public static AddFileData AddFile(string filePath, string textAndCarets)
     {
-        var variables = new Dictionary<string, object?>();
-        variables.Add("filePath", filePath);
-        variables.Add("textAndCarets", textAndCarets);
-
-        var request = new GraphQLRequest
+        var request = new GraphQLRequest<AddFileVariables>
         {
             Query =
                 @"
@@ -106,10 +93,14 @@ public static partial class GraphQLOperations
 },
             ",
             OperationName = "AddFile",
-            Variables = variables,
+            Variables = new AddFileVariables()
+            {
+                FilePath = filePath,
+                TextAndCarets = textAndCarets,
+            },
         };
 
-        var response = CodegenBotHost.GraphQL(request);
+        var response = Imports.GraphQL(request);
         var result = JsonSerializer.Deserialize<GraphQLResponse<AddFileData>>(
             response,
             new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
@@ -119,11 +110,7 @@ public static partial class GraphQLOperations
 
     public static AddTextData AddText(string caretId, string textAndCarets)
     {
-        var variables = new Dictionary<string, object?>();
-        variables.Add("caretId", caretId);
-        variables.Add("textAndCarets", textAndCarets);
-
-        var request = new GraphQLRequest
+        var request = new GraphQLRequest<AddTextVariables>
         {
             Query =
                 @"
@@ -134,10 +121,10 @@ public static partial class GraphQLOperations
 },
             ",
             OperationName = "AddText",
-            Variables = variables,
+            Variables = new AddTextVariables() { CaretId = caretId, TextAndCarets = textAndCarets },
         };
 
-        var response = CodegenBotHost.GraphQL(request);
+        var response = Imports.GraphQL(request);
         var result = JsonSerializer.Deserialize<GraphQLResponse<AddTextData>>(
             response,
             new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
@@ -147,12 +134,7 @@ public static partial class GraphQLOperations
 
     public static AddKeyedTextData AddKeyedText(string key, string caretId, string textAndCarets)
     {
-        var variables = new Dictionary<string, object?>();
-        variables.Add("key", key);
-        variables.Add("caretId", caretId);
-        variables.Add("textAndCarets", textAndCarets);
-
-        var request = new GraphQLRequest
+        var request = new GraphQLRequest<AddKeyedTextVariables>
         {
             Query =
                 @"
@@ -163,10 +145,15 @@ public static partial class GraphQLOperations
 },
             ",
             OperationName = "AddKeyedText",
-            Variables = variables,
+            Variables = new AddKeyedTextVariables()
+            {
+                Key = key,
+                CaretId = caretId,
+                TextAndCarets = textAndCarets,
+            },
         };
 
-        var response = CodegenBotHost.GraphQL(request);
+        var response = Imports.GraphQL(request);
         var result = JsonSerializer.Deserialize<GraphQLResponse<AddKeyedTextData>>(
             response,
             new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
@@ -176,11 +163,7 @@ public static partial class GraphQLOperations
 
     public static AddTextByTagsData AddTextByTags(List<CaretTagInput>? tags, string textAndCarets)
     {
-        var variables = new Dictionary<string, object?>();
-        variables.Add("tags", tags);
-        variables.Add("textAndCarets", textAndCarets);
-
-        var request = new GraphQLRequest
+        var request = new GraphQLRequest<AddTextByTagsVariables>
         {
             Query =
                 @"
@@ -191,10 +174,10 @@ public static partial class GraphQLOperations
 },
             ",
             OperationName = "AddTextByTags",
-            Variables = variables,
+            Variables = new AddTextByTagsVariables() { Tags = tags, TextAndCarets = textAndCarets },
         };
 
-        var response = CodegenBotHost.GraphQL(request);
+        var response = Imports.GraphQL(request);
         var result = JsonSerializer.Deserialize<GraphQLResponse<AddTextByTagsData>>(
             response,
             new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
@@ -208,12 +191,7 @@ public static partial class GraphQLOperations
         string textAndCarets
     )
     {
-        var variables = new Dictionary<string, object?>();
-        variables.Add("key", key);
-        variables.Add("tags", tags);
-        variables.Add("textAndCarets", textAndCarets);
-
-        var request = new GraphQLRequest
+        var request = new GraphQLRequest<AddKeyedTextByTagsVariables>
         {
             Query =
                 @"
@@ -224,10 +202,15 @@ public static partial class GraphQLOperations
 },
             ",
             OperationName = "AddKeyedTextByTags",
-            Variables = variables,
+            Variables = new AddKeyedTextByTagsVariables()
+            {
+                Key = key,
+                Tags = tags,
+                TextAndCarets = textAndCarets,
+            },
         };
 
-        var response = CodegenBotHost.GraphQL(request);
+        var response = Imports.GraphQL(request);
         var result = JsonSerializer.Deserialize<GraphQLResponse<AddKeyedTextByTagsData>>(
             response,
             new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
@@ -237,12 +220,7 @@ public static partial class GraphQLOperations
 
     public static LogData Log(LogSeverity severity, string message, List<string>? arguments)
     {
-        var variables = new Dictionary<string, object?>();
-        variables.Add("severity", severity.ToString());
-        variables.Add("message", message);
-        variables.Add("arguments", arguments);
-
-        var request = new GraphQLRequest
+        var request = new GraphQLRequest<LogVariables>
         {
             Query =
                 @"
@@ -251,10 +229,15 @@ public static partial class GraphQLOperations
 },
             ",
             OperationName = "Log",
-            Variables = variables,
+            Variables = new LogVariables()
+            {
+                Severity = severity,
+                Message = message,
+                Arguments = arguments,
+            },
         };
 
-        var response = CodegenBotHost.GraphQL(request);
+        var response = Imports.GraphQL(request);
         var result = JsonSerializer.Deserialize<GraphQLResponse<LogData>>(
             response,
             new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
@@ -315,6 +298,8 @@ public class GetConfigurationData
     public GetConfiguration Configuration { get; set; }
 }
 
+public class GetConfigurationVariables { }
+
 public class GetConfiguration
 {
     [JsonPropertyName("outputPath")]
@@ -323,12 +308,17 @@ public class GetConfiguration
 
 public class GetFilesData
 {
-    [JsonPropertyName("kind")]
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public FileKind Kind { get; set; }
-
     [JsonPropertyName("files")]
     public List<GetFiles>? Files { get; set; }
+}
+
+public class GetFilesVariables
+{
+    [JsonPropertyName("whitelist")]
+    public List<string>? Whitelist { get; set; }
+
+    [JsonPropertyName("blacklist")]
+    public List<string>? Blacklist { get; set; }
 }
 
 public class GetFiles
@@ -336,6 +326,7 @@ public class GetFiles
     [JsonPropertyName("path")]
     public string Path { get; set; }
 
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     [JsonPropertyName("kind")]
     public FileKind Kind { get; set; }
 }
@@ -346,10 +337,25 @@ public class GetFileContentsData
     public string ReadTextFile { get; set; }
 }
 
+public class GetFileContentsVariables
+{
+    [JsonPropertyName("textFilePath")]
+    public string TextFilePath { get; set; }
+}
+
 public class AddFileData
 {
     [JsonPropertyName("addFile")]
     public AddFile AddFile { get; set; }
+}
+
+public class AddFileVariables
+{
+    [JsonPropertyName("filePath")]
+    public string FilePath { get; set; }
+
+    [JsonPropertyName("textAndCarets")]
+    public string TextAndCarets { get; set; }
 }
 
 public class AddFile
@@ -364,6 +370,15 @@ public class AddTextData
     public AddText AddText { get; set; }
 }
 
+public class AddTextVariables
+{
+    [JsonPropertyName("caretId")]
+    public string CaretId { get; set; }
+
+    [JsonPropertyName("textAndCarets")]
+    public string TextAndCarets { get; set; }
+}
+
 public class AddText
 {
     [JsonPropertyName("id")]
@@ -374,6 +389,18 @@ public class AddKeyedTextData
 {
     [JsonPropertyName("addKeyedText")]
     public AddKeyedText AddKeyedText { get; set; }
+}
+
+public class AddKeyedTextVariables
+{
+    [JsonPropertyName("key")]
+    public string Key { get; set; }
+
+    [JsonPropertyName("caretId")]
+    public string CaretId { get; set; }
+
+    [JsonPropertyName("textAndCarets")]
+    public string TextAndCarets { get; set; }
 }
 
 public class AddKeyedText
@@ -388,6 +415,15 @@ public class AddTextByTagsData
     public List<AddTextByTags>? AddTextByTags { get; set; }
 }
 
+public class AddTextByTagsVariables
+{
+    [JsonPropertyName("tags")]
+    public List<CaretTagInput>? Tags { get; set; }
+
+    [JsonPropertyName("textAndCarets")]
+    public string TextAndCarets { get; set; }
+}
+
 public class AddTextByTags
 {
     [JsonPropertyName("id")]
@@ -400,6 +436,18 @@ public class AddKeyedTextByTagsData
     public List<AddKeyedTextByTags>? AddKeyedTextByTags { get; set; }
 }
 
+public class AddKeyedTextByTagsVariables
+{
+    [JsonPropertyName("key")]
+    public string Key { get; set; }
+
+    [JsonPropertyName("tags")]
+    public List<CaretTagInput>? Tags { get; set; }
+
+    [JsonPropertyName("textAndCarets")]
+    public string TextAndCarets { get; set; }
+}
+
 public class AddKeyedTextByTags
 {
     [JsonPropertyName("id")]
@@ -410,4 +458,17 @@ public class LogData
 {
     [JsonPropertyName("log")]
     public string Log { get; set; }
+}
+
+public class LogVariables
+{
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    [JsonPropertyName("severity")]
+    public LogSeverity Severity { get; set; }
+
+    [JsonPropertyName("message")]
+    public string Message { get; set; }
+
+    [JsonPropertyName("arguments")]
+    public List<string>? Arguments { get; set; }
 }

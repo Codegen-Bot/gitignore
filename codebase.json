@@ -39,8 +39,29 @@
       ]
     },
     {
-      "botId": "bot://hub/botfactory/dotnet",
+      "botId": "bot://hub/dotnet/solution",
       "botVersion": "0.0.1-alpha3",
+      "configuration": {
+        "outputPath": "GitIgnore.sln"
+      },
+      "dependencies": [
+        {
+          "targetPath": ".",
+          "botId": "bot://core/output"
+        },
+        {
+          "targetPath": ".",
+          "botId": "bot://core/filesystem"
+        },
+        {
+          "targetPath": ".",
+          "botId": "bot://core/log"
+        }
+      ]
+    },
+    {
+      "botId": "bot://hub/dotnet/botfactory",
+      "botVersion": "0.0.1-alpha6",
       "configuration": {
         "id": "bot://hub/.gitignore",
         "outputPath": "GitIgnore",

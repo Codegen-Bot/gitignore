@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using CodegenBot;
 using Extism;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace GitIgnore;
 
@@ -15,61 +14,27 @@ public class Functions
         // Note: a `Main` method is required for the app to compile
     }
 
-    private static IServiceProvider _services;
-
-    [UnmanagedCallersOnly(EntryPoint = "greet")]
-    public static int Greet()
-    {
-        var name = Pdk.GetInputString();
-        var greeting = $"Hello, {name}!";
-        Pdk.SetOutput(greeting);
-
-        return 0;
-    }
-
     [UnmanagedCallersOnly(EntryPoint = "entry_point")]
     public static int Run()
     {
         try
         {
-            var services = new ServiceCollection();
-            CodegenBotHost.Log(
-                new LogEvent()
-                {
-                    Level = LogEventLevel.Information,
-                    Message = "Registering services",
-                    Args = [],
-                }
-            );
-            services.AddSingleton<IMiniBot, GitIgnoreMiniBot>();
+            // Create all our minibots here
+            IMiniBot[] miniBots =
+            [
+                new GitIgnoreMiniBot(),
+            ];
 
-            _services = services.BuildServiceProvider();
-
-            CodegenBotHost.Log(
-                new LogEvent()
-                {
-                    Level = LogEventLevel.Information,
-                    Message = "Built service provider",
-                    Args = [],
-                }
-            );
-            foreach (var miniBot in _services.GetRequiredService<IEnumerable<IMiniBot>>())
+            // Run each minibot in order
+            foreach (var miniBot in miniBots)
             {
-                CodegenBotHost.Log(
-                    new LogEvent()
-                    {
-                        Level = LogEventLevel.Information,
-                        Message = "Running minibot {MiniBot}",
-                        Args = [miniBot.GetType().Name],
-                    }
-                );
                 try
                 {
                     miniBot.Execute();
                 }
                 catch (Exception e)
                 {
-                    CodegenBotHost.Log(
+                    Imports.Log(
                         new LogEvent()
                         {
                             Level = LogEventLevel.Error,
@@ -91,7 +56,7 @@ public class Functions
         }
         catch (Exception e)
         {
-            CodegenBotHost.Log(
+            Imports.Log(
                 new LogEvent()
                 {
                     Level = LogEventLevel.Error,
@@ -100,7 +65,7 @@ public class Functions
                 }
             );
             Pdk.SetError($"{e.GetType()}: {e.Message}");
-            return 20;
+            return 0;
         }
     }
 }
