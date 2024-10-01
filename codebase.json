@@ -61,13 +61,17 @@
     },
     {
       "botId": "bot://hub/dotnet/botfactory",
-      "botVersion": "0.0.1-alpha2",
+      "botVersion": "0.0.1-alpha1",
       "configuration": {
         "id": "bot://hub/.gitignore",
         "outputPath": "GitIgnore",
         "projectName": "GitIgnore",
         "language": "CSHARP",
-        "deduplicateConfigurationSchema": true
+        "deduplicateConfigurationSchema": true,
+		"copybots": [],
+		"provideApi": false,
+		"minimalWorkingExample": false,
+		"dotnetVersion": "DotNet8"
       },
       "dependencies": [
         {
