@@ -27,7 +27,8 @@ public class Exports
             IMiniBot[] miniBots =
             [
                 // TODO - remove the ExampleMiniBot entry from this list because it creates a hello world file
-                // that won't be useful in real life.
+                // that won't be useful in real life, and could even be harmful if you're writing to configuration.OutputPath elsewhere,
+                // or if you're assuming configuration.OutputPath is a directory and you're writing to files under it.
                 new ExampleMiniBot(),
             ];
 
@@ -43,7 +44,8 @@ public class Exports
                     Imports.Log(
                         new LogEvent()
                         {
-                            Level = LogEventLevel.Error,
+                            // Only a critical error will cause codegen.bot to realize that the generated code should not be used
+                            Level = LogEventLevel.Critical,
                             Message =
                                 "Failed to run minibot {MiniBot}: {ExceptionType} {Message}, {StackTrace}",
                             Args =
@@ -51,7 +53,7 @@ public class Exports
                                 miniBot.GetType().Name,
                                 e.GetType().Name,
                                 e.Message,
-                                e.StackTrace,
+                                e.StackTrace ?? "",
                             ],
                         }
                     );
@@ -65,9 +67,10 @@ public class Exports
             Imports.Log(
                 new LogEvent()
                 {
-                    Level = LogEventLevel.Error,
+                    // Only a critical error will cause codegen.bot to realize that the generated code should not be used
+                    Level = LogEventLevel.Critical,
                     Message = "Failed to initialize bot: {ExceptionType} {Message}, {StackTrace}",
-                    Args = [e.GetType().Name, e.Message, e.StackTrace],
+                    Args = [e.GetType().Name, e.Message, e.StackTrace ?? ""],
                 }
             );
             Pdk.SetError($"{e.GetType()}: {e.Message}");
