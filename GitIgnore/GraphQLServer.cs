@@ -89,7 +89,7 @@ public class GraphQLServerRequest
     {
         return JsonSerializer.Deserialize(
             requestBody,
-            GraphQLServerJsonSerializerContext.Default.GraphQLRequest
+            GraphQLServerJsonSerializerContext.Default.GraphQLServerRequest
         );
     }
 
@@ -97,12 +97,22 @@ public class GraphQLServerRequest
     {
         return JsonSerializer.Serialize(
             this,
-            GraphQLServerJsonSerializerContext.Default.GraphQLRequest
+            GraphQLServerJsonSerializerContext.Default.GraphQLServerRequest
         );
     }
 }
 
+public partial class ParseGraphQLOperationOperationNestedSelection
+    : INestedSelection<
+        ParseGraphQLOperationOperationNestedSelectionFieldSelection,
+        ParseGraphQLOperationOperationNestedSelectionFragmentSpreadSelection
+    > { }
+
 public partial class Mutation
 {
-    public void AddSelectedFields() { }
+    public void AddSelectedFields(
+        JsonObject result,
+        IReadOnlyList<ParseGraphQLOperationOperationVariable> queryVariables,
+        List<ParseGraphQLOperationOperationNestedSelection> queryNestedSelection
+    ) { }
 }

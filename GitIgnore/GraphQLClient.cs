@@ -459,7 +459,7 @@ public partial class AddFileVariables
     public required string TextAndCarets { get; set; }
 }
 
-public class AddFile
+public partial class AddFile
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -483,7 +483,7 @@ public partial class AddKeyedTextVariables
     public required string TextAndCarets { get; set; }
 }
 
-public class AddKeyedText
+public partial class AddKeyedText
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -507,7 +507,7 @@ public partial class AddKeyedTextByTagsVariables
     public required string TextAndCarets { get; set; }
 }
 
-public class AddKeyedTextByTags
+public partial class AddKeyedTextByTags
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -528,7 +528,7 @@ public partial class AddTextVariables
     public required string TextAndCarets { get; set; }
 }
 
-public class AddText
+public partial class AddText
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -549,7 +549,7 @@ public partial class AddTextByTagsVariables
     public required string TextAndCarets { get; set; }
 }
 
-public class AddTextByTags
+public partial class AddTextByTags
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -570,7 +570,7 @@ public partial class GetFilesVariables
     public required List<string> Blacklist { get; set; }
 }
 
-public class GetFiles
+public partial class GetFiles
 {
     [JsonPropertyName("path")]
     public required string Path { get; set; }
@@ -609,13 +609,13 @@ public partial class ParseGraphQLOperationVariables
     public required List<AdditionalFileInput> Graphql { get; set; }
 }
 
-public class ParseGraphQLOperation
+public partial class ParseGraphQLOperation
 {
     [JsonPropertyName("operations")]
     public required List<ParseGraphQLOperationOperation> Operations { get; set; }
 }
 
-public class ParseGraphQLOperationOperation
+public partial class ParseGraphQLOperationOperation
 {
     [JsonPropertyName("name")]
     public string? Name { get; set; }
@@ -633,7 +633,7 @@ public class ParseGraphQLOperationOperation
     public required List<ParseGraphQLOperationOperationNestedSelection> NestedSelection { get; set; }
 }
 
-public class ParseGraphQLOperationOperationVariable
+public partial class ParseGraphQLOperationOperationVariable
 {
     [JsonPropertyName("name")]
     public required string Name { get; set; }
@@ -642,13 +642,13 @@ public class ParseGraphQLOperationOperationVariable
     public required ParseGraphQLOperationOperationVariableType Type { get; set; }
 }
 
-public class ParseGraphQLOperationOperationVariableType
+public partial class ParseGraphQLOperationOperationVariableType
 {
     [JsonPropertyName("text")]
     public required string Text { get; set; }
 }
 
-public class ParseGraphQLOperationOperationNestedSelection
+public partial class ParseGraphQLOperationOperationNestedSelection
 {
     [JsonPropertyName("depth")]
     public required int Depth { get; set; }
@@ -660,7 +660,7 @@ public class ParseGraphQLOperationOperationNestedSelection
     public ParseGraphQLOperationOperationNestedSelectionFragmentSpreadSelection? FragmentSpreadSelection { get; set; }
 }
 
-public class ParseGraphQLOperationOperationNestedSelectionFieldSelection
+public partial class ParseGraphQLOperationOperationNestedSelectionFieldSelection
 {
     [JsonPropertyName("name")]
     public required string Name { get; set; }
@@ -669,7 +669,7 @@ public class ParseGraphQLOperationOperationNestedSelectionFieldSelection
     public string? Alias { get; set; }
 }
 
-public class ParseGraphQLOperationOperationNestedSelectionFragmentSpreadSelection
+public partial class ParseGraphQLOperationOperationNestedSelectionFragmentSpreadSelection
 {
     [JsonPropertyName("name")]
     public required string Name { get; set; }
