@@ -123,5 +123,5 @@ public partial class Mutation
         JsonObject result
     ) { }
 
-    public string Hmmm { get; set; }
+    public string GetAddIgnorePattern(string? directory, string pattern) { }
 }
