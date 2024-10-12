@@ -30,6 +30,7 @@ public partial class GraphQLServer
                    "Could not parse GraphQL request JSON",
                ],
            }, GraphQLServerJsonSerializerContext.Default.GraphQLServerErrorResponse);
+           return;
         }
         
         var query = GraphQLClient.ParseGraphQLOperation(request.Query).GraphQL.Operations.SingleOrDefault();
@@ -42,6 +43,7 @@ public partial class GraphQLServer
                    "Could not parse GraphQL request query",
                ],
            }, GraphQLServerJsonSerializerContext.Default.GraphQLServerErrorResponse);
+           return;
         }
         
         var result = new JsonObject();
