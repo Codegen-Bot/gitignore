@@ -75,6 +75,7 @@ type GraphQLFieldSelection implements GraphQLSelection @source(name: "GraphQLFie
   fieldSelections: [GraphQLFieldSelection!]!
   fragmentSpreadSelections: [GraphQLFragmentSpreadSelection!]!
   directives: [GraphQLDirective!]!
+  arguments: [GraphQLDirectiveArgument!]!
 }
 
 type GraphQLFragment @source(name: "GraphQLFragment", schema: "graphql") {
