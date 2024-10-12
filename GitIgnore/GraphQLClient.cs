@@ -74,6 +74,7 @@ public partial class GraphQLError
 [JsonSerializable(typeof(ParseGraphQLOperationOperationVariableType))]
 [JsonSerializable(typeof(ParseGraphQLOperationOperationNestedSelection))]
 [JsonSerializable(typeof(ParseGraphQLOperationOperationNestedSelectionFieldSelection))]
+[JsonSerializable(typeof(ParseGraphQLOperationOperationNestedSelectionFieldSelectionArgument))]
 [JsonSerializable(typeof(ParseGraphQLOperationOperationNestedSelectionFragmentSpreadSelection))]
 [JsonSerializable(typeof(ReadTextFileVariables))]
 [JsonSerializable(typeof(ReadTextFileData))]
@@ -318,6 +319,12 @@ public static partial class GraphQLClient
                         fieldSelection {
                           name
                           alias
+                          arguments {
+                            name
+                            type {
+                              text
+                            }
+                          }
                         }
                         fragmentSpreadSelection {
                           name
@@ -667,6 +674,15 @@ public partial class ParseGraphQLOperationOperationNestedSelectionFieldSelection
 
     [JsonPropertyName("alias")]
     public string? Alias { get; set; }
+
+    [JsonPropertyName("arguments")]
+    public required List<ParseGraphQLOperationOperationNestedSelectionFieldSelectionArgument> Arguments { get; set; }
+}
+
+public partial class ParseGraphQLOperationOperationNestedSelectionFieldSelectionArgument
+{
+    [JsonPropertyName("name")]
+    public required string Name { get; set; }
 }
 
 public partial class ParseGraphQLOperationOperationNestedSelectionFragmentSpreadSelection
