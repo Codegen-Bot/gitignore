@@ -148,5 +148,5 @@ public partial class Mutation
         }
     }
 
-    public string AddIgnorePattern(string? directory, string pattern) { }
+    public partial string AddIgnorePattern(string? directory, string pattern);
 }

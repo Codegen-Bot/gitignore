@@ -324,6 +324,7 @@ public static partial class GraphQLClient
                             type {
                               text
                             }
+                            value
                           }
                         }
                         fragmentSpreadSelection {
@@ -683,6 +684,9 @@ public partial class ParseGraphQLOperationOperationNestedSelectionFieldSelection
 {
     [JsonPropertyName("name")]
     public required string Name { get; set; }
+
+    [JsonPropertyName("value")]
+    public required string Value { get; set; }
 }
 
 public partial class ParseGraphQLOperationOperationNestedSelectionFragmentSpreadSelection
