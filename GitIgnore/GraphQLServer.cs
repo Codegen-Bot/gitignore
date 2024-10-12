@@ -31,7 +31,9 @@ public partial class GraphQLServer
         }
 
         var query = GraphQLClient
-            .ParseGraphQLOperation(request.Query)
+            .ParseGraphQLOperation(
+                [new AdditionalFileInput() { FilePath = "tmp.graphql", Content = request.Query }]
+            )
             .GraphQL.Operations.SingleOrDefault();
 
         if (query is null)
@@ -69,7 +71,7 @@ public partial class GraphQLServer
         }
     }
 
-    public Mutation Mutation { get; set; }
+    public Mutation Mutation { get; } = new();
 }
 
 public class GraphQLServerErrorResponse
