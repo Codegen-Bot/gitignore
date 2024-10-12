@@ -51,12 +51,7 @@ public partial class GraphQLServer
 
         if (query.OperationType == GraphQLOperationType.MUTATION)
         {
-            Mutation.AddSelectedFields(
-                result,
-                query.Variables,
-                query.FieldSelection,
-                query.FragmentSpreadSelection
-            );
+            Mutation.AddSelectedFields(result, query.Variables, query.NestedSelection);
         }
         else
         {
@@ -76,7 +71,7 @@ public partial class GraphQLServer
 
 public class GraphQLServerErrorResponse
 {
-    public List<string> Errors { get; set; }
+    public required List<string> Errors { get; set; }
 }
 
 public class GraphQLServerRequest
@@ -94,7 +89,7 @@ public class GraphQLServerRequest
     {
         return JsonSerializer.Deserialize(
             requestBody,
-            GraphQLServerRequestJsonSerializerContext.Default.GraphQLRequest
+            GraphQLServerJsonSerializerContext.Default.GraphQLRequest
         );
     }
 
@@ -102,7 +97,7 @@ public class GraphQLServerRequest
     {
         return JsonSerializer.Serialize(
             this,
-            GraphQLServerRequestJsonSerializerContext.Default.GraphQLRequest
+            GraphQLServerJsonSerializerContext.Default.GraphQLRequest
         );
     }
 }
