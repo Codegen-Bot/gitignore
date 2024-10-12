@@ -51,7 +51,11 @@ public partial class GraphQLServer
 
         if (query.OperationType == GraphQLOperationType.MUTATION)
         {
-            Mutation.AddSelectedFields(result, query.Variables, query.NestedSelection);
+            Mutation.AddSelectedFields(
+                query.Variables,
+                query.NestedSelection.ToSelections(),
+                result
+            );
         }
         else
         {
@@ -64,6 +68,9 @@ public partial class GraphQLServer
                 }
             );
         }
+
+        var resultString = result.ToJsonString();
+        return resultString;
     }
 
     public Mutation Mutation { get; } = new();
@@ -111,8 +118,10 @@ public partial class ParseGraphQLOperationOperationNestedSelection
 public partial class Mutation
 {
     public void AddSelectedFields(
-        JsonObject result,
-        IReadOnlyList<ParseGraphQLOperationOperationVariable> queryVariables,
-        List<ParseGraphQLOperationOperationNestedSelection> queryNestedSelection
+        IReadOnlyList<ParseGraphQLOperationOperationVariable> variables,
+        IReadOnlyList<ParseGraphQLOperationOperationNestedSelection> selection,
+        JsonObject result
     ) { }
+
+    public string Hmmm { get; set; }
 }
