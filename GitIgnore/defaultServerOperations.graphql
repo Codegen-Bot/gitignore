@@ -20,6 +20,7 @@ query ParseGraphQLOperation($graphql: [AdditionalFileInput!]!) {
             type {
               text
             }
+            value
           }
         }
         fragmentSpreadSelection {
