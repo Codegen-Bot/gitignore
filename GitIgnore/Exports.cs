@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using CodegenBot;
 using Extism;
+using HotChocolate.Execution;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace GitIgnore;
 
@@ -16,7 +20,22 @@ public class Exports
     public static void Main()
     {
         // Note: a `Main` method is required for the app to compile
+        // However this is also used to export the GraphQL schema
+
+        var schema = _graphqlServer.GetGraphQLSchema();
+
+        var providedSchemaFilePath = ProvidedSchemaUtility.CalculateProvidedSchemaPath();
+
+        if (providedSchemaFilePath is null)
+        {
+            return;
+        }
+
+        Console.WriteLine($"Writing provided schema to {providedSchemaFilePath}");
+        File.WriteAllText(providedSchemaFilePath, schema);
     }
+
+    private static GraphQLServer _graphqlServer = new();
 
     [UnmanagedCallersOnly(EntryPoint = "entry_point")]
     public static int Run()
@@ -67,6 +86,36 @@ public class Exports
                     // Only a critical error will cause codegen.bot to realize that the generated code should not be used
                     Level = LogEventLevel.Critical,
                     Message = "Failed to initialize bot: {ExceptionType} {Message}, {StackTrace}",
+                    Args = [e.GetType().Name, e.Message, e.StackTrace ?? ""],
+                }
+            );
+            Pdk.SetError($"{e.GetType()}: {e.Message}");
+            return 0;
+        }
+    }
+
+    [UnmanagedCallersOnly(EntryPoint = "handle_request")]
+    public static int HandleRequest()
+    {
+        try
+        {
+            var request = Pdk.GetInputString();
+
+            var result = _graphqlServer.Execute(request);
+
+            Pdk.SetOutput(result);
+
+            return 0;
+        }
+        catch (Exception e)
+        {
+            Imports.Log(
+                new LogEvent()
+                {
+                    // Only a critical error will cause codegen.bot to realize that the generated code should not be used
+                    Level = LogEventLevel.Critical,
+                    Message =
+                        "Failed to handle GraphQL request: {ExceptionType} {Message}, {StackTrace}",
                     Args = [e.GetType().Name, e.Message, e.StackTrace ?? ""],
                 }
             );
