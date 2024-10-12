@@ -1,0 +1,25 @@
+query ParseGraphQLOperation($graphql: [AdditionalFileInput!]!) {
+  graphQL(additionalFiles: $graphql) {
+    operations {
+      name
+      operationType
+      text
+      variables {
+        name
+        type {
+          text
+        }
+      }
+      nestedSelection {
+        depth
+        fieldSelection {
+          name
+          alias
+        }
+        fragmentSpreadSelection {
+          name
+        }
+      }
+    }
+  }
+}
