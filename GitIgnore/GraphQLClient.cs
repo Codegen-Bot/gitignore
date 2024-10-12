@@ -55,10 +55,6 @@ public partial class GraphQLError
 [JsonSerializable(typeof(GraphQLResponse<AddTextByTagsData>))]
 [JsonSerializable(typeof(GraphQLRequest<AddTextByTagsVariables>))]
 [JsonSerializable(typeof(AddTextByTags))]
-[JsonSerializable(typeof(GetConfigurationVariables))]
-[JsonSerializable(typeof(GetConfigurationData))]
-[JsonSerializable(typeof(GraphQLResponse<GetConfigurationData>))]
-[JsonSerializable(typeof(GraphQLRequest<GetConfigurationVariables>))]
 [JsonSerializable(typeof(GetFilesVariables))]
 [JsonSerializable(typeof(GetFilesData))]
 [JsonSerializable(typeof(GraphQLResponse<GetFilesData>))]
@@ -240,35 +236,6 @@ public static partial class GraphQLClient
         );
         return result?.Data
             ?? throw new InvalidOperationException("Received null data for request AddTextByTags.");
-    }
-
-    public static GetConfigurationData GetConfiguration()
-    {
-        var request = new GraphQLRequest<GetConfigurationVariables>
-        {
-            Query = """
-                query GetConfiguration {
-                  configuration {
-                    outputPath
-                  }
-                }
-                """,
-            OperationName = "GetConfiguration",
-            Variables = new GetConfigurationVariables() { },
-        };
-
-        var response = Imports.GraphQL(
-            request,
-            GraphQLClientJsonSerializerContext.Default.GraphQLRequestGetConfigurationVariables
-        );
-        var result = JsonSerializer.Deserialize<GraphQLResponse<GetConfigurationData>>(
-            response,
-            GraphQLClientJsonSerializerContext.Default.GraphQLResponseGetConfigurationData
-        );
-        return result?.Data
-            ?? throw new InvalidOperationException(
-                "Received null data for request GetConfiguration."
-            );
     }
 
     public static GetFilesData GetFiles(List<string> whitelist, List<string> blacklist)
@@ -587,10 +554,6 @@ public class AddTextByTags
     [JsonPropertyName("id")]
     public required string Id { get; set; }
 }
-
-public partial class GetConfigurationData { }
-
-public partial class GetConfigurationVariables { }
 
 public partial class GetFilesData
 {
