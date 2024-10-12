@@ -16,7 +16,6 @@
   "exec": {
     "devenv": "dotnet workload install wasi-experimental",
     "build": "dotnet build -c Release -r wasi-wasm",
-    "build-docker": "docker run -v .:/src codegenbot/dotnet-bot-builder:net8.0",
-    "schema": "dotnet run"
+    "build-docker": "docker run -v .:/src codegenbot/dotnet-bot-builder:net8.0"
   }
 }

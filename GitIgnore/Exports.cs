@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using CodegenBot;
 using Extism;
-using HotChocolate.Execution;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace GitIgnore;
 
@@ -20,19 +16,6 @@ public class Exports
     public static void Main()
     {
         // Note: a `Main` method is required for the app to compile
-        // However this is also used to export the GraphQL schema
-
-        var schema = _graphqlServer.GetGraphQLSchema();
-
-        var providedSchemaFilePath = ProvidedSchemaUtility.CalculateProvidedSchemaPath();
-
-        if (providedSchemaFilePath is null)
-        {
-            return;
-        }
-
-        Console.WriteLine($"Writing provided schema to {providedSchemaFilePath}");
-        File.WriteAllText(providedSchemaFilePath, schema);
     }
 
     private static GraphQLServer _graphqlServer = new();
