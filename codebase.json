@@ -18,6 +18,10 @@
       "botVersion": "1.0.0"
     },
     {
+      "botId": "bot://parse/graphql",
+      "botVersion": "1.0.0"
+    },
+    {
       "botId": "bot://hub/.gitignore",
       "botVersion": "0.0.1-alpha1",
       "configuration": {
@@ -61,7 +65,7 @@
     },
     {
       "botId": "bot://hub/dotnet/botfactory",
-      "botVersion": "0.0.1-alpha1",
+      "botVersion": "0.0.1-alpha67",
       "configuration": {
         "id": "bot://hub/.gitignore",
         "outputPath": "GitIgnore",
@@ -69,7 +73,7 @@
         "language": "CSHARP",
         "deduplicateConfigurationSchema": true,
 		"copybots": [],
-		"provideApi": false,
+		"provideApi": true,
 		"minimalWorkingExample": false,
 		"dotnetVersion": "DotNet8"
       },

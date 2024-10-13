@@ -1,0 +1,230 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+interface GraphQLSelection @source(name: "GraphQLSelection", schema: "graphql") {
+  name: String!
+}
+
+type Caret @source(name: "Caret", schema: "output") {
+  separator: String!
+  string: String!
+  tags: [CaretTag!]!
+  tagValue(tagName: String!): String
+  matches(tags: [CaretTagInput!]!): Boolean!
+  id: String!
+}
+
+type CaretTag @source(name: "CaretTag", schema: "output") {
+  name: String!
+  value: String!
+}
+
+type File @source(name: "File", schema: "filesystem") {
+  path: String!
+  kind: FileKind!
+}
+
+type GraphQLArgument @source(name: "GraphQLArgument", schema: "graphql") {
+  name: String!
+  value: String!
+}
+
+type GraphQLDirective @source(name: "GraphQLDirective", schema: "graphql") {
+  name: String!
+  arguments: [GraphQLArgument!]!
+}
+
+type GraphQLDirectiveType @source(name: "GraphQLDirectiveType", schema: "graphql") {
+  name: String!
+  parameters: [GraphQLParameter!]!
+  isRepeatable: Boolean!
+}
+
+type GraphQLEnumeration @source(name: "GraphQLEnumeration", schema: "graphql") {
+  name: String!
+  directives: [GraphQLDirective!]!
+  values: [GraphQLEnumerationValue!]!
+}
+
+type GraphQLEnumerationValue @source(name: "GraphQLEnumerationValue", schema: "graphql") {
+  name: String!
+  directives: [GraphQLDirective!]!
+}
+
+type GraphQLField @source(name: "GraphQLField", schema: "graphql") {
+  name: String!
+  type: TypeRef!
+  parameters: [GraphQLParameter!]!
+  directives: [GraphQLDirective!]!
+  description: String
+}
+
+type GraphQLFieldSelection implements GraphQLSelection @source(name: "GraphQLFieldSelection", schema: "graphql") {
+  name: String!
+  alias: String
+  selections: [GraphQLSelection!]!
+  fieldSelections: [GraphQLFieldSelection!]!
+  fragmentSpreadSelections: [GraphQLFragmentSpreadSelection!]!
+  directives: [GraphQLDirective!]!
+  arguments: [GraphQLArgument!]!
+}
+
+type GraphQLFragment @source(name: "GraphQLFragment", schema: "graphql") {
+  name: String!
+  typeCondition: String!
+  variables: [GraphQLVariable!]!
+  selections: [GraphQLSelection!]!
+  fieldSelections: [GraphQLFieldSelection!]!
+  fragmentSpreadSelections: [GraphQLFragmentSpreadSelection!]!
+  directives: [GraphQLDirective!]!
+}
+
+type GraphQLFragmentSpreadSelection implements GraphQLSelection @source(name: "GraphQLFragmentSpreadSelection", schema: "graphql") {
+  name: String!
+}
+
+type GraphQLInputField @source(name: "GraphQLInputField", schema: "graphql") {
+  name: String!
+  type: TypeRef!
+  directives: [GraphQLDirective!]!
+  value: String
+}
+
+type GraphQLInputObjectType @source(name: "GraphQLInputObjectType", schema: "graphql") {
+  name: String!
+  fields: [GraphQLInputField!]!
+  directives: [GraphQLDirective!]!
+}
+
+type GraphQLInterfaceType @source(name: "GraphQLInterfaceType", schema: "graphql") {
+  name: String!
+  fields: [GraphQLField!]!
+  directives: [GraphQLDirective!]!
+}
+
+type GraphQLMetadata @source(name: "GraphQLMetadata", schema: "graphql") {
+  operations: [GraphQLOperation!]!
+  objectTypes: [GraphQLObjectType!]!
+  inputObjectTypes: [GraphQLInputObjectType!]!
+  interfaceTypes: [GraphQLInterfaceType!]!
+  scalarTypes: [GraphQLScalarType!]!
+  fragments: [GraphQLFragment!]!
+  directives: [GraphQLDirectiveType!]!
+  enumerations: [GraphQLEnumeration!]!
+}
+
+type GraphQLObjectType @source(name: "GraphQLObjectType", schema: "graphql") {
+  name: String!
+  fields: [GraphQLField!]!
+  directives: [GraphQLDirective!]!
+}
+
+type GraphQLOperation @source(name: "GraphQLOperation", schema: "graphql") {
+  name: String
+  text: String!
+  operationType: GraphQLOperationType!
+  selections: [GraphQLSelection!]!
+  fieldSelections: [GraphQLFieldSelection!]!
+  nestedSelection: [NestedSelection!]!
+  fragmentSpreadSelections: [GraphQLFragmentSpreadSelection!]!
+  directives: [GraphQLDirective!]!
+  variables: [GraphQLVariable!]!
+}
+
+type GraphQLParameter @source(name: "GraphQLParameter", schema: "graphql") {
+  name: String!
+  type: TypeRef!
+  directives: [GraphQLDirective!]!
+  defaultValue: String
+}
+
+type GraphQLScalarType @source(name: "GraphQLScalarType", schema: "graphql") {
+  name: String!
+  directives: [GraphQLDirective!]!
+}
+
+type GraphQLVariable @source(name: "GraphQLVariable", schema: "graphql") {
+  name: String!
+  type: TypeRef!
+  directives: [GraphQLDirective!]!
+  value: String
+}
+
+type Mutation {
+  noop: String
+  getOrAddCaret(caretId: String! tags: [CaretTagInput!]! indentation: String! separator: String!): Caret! @delegate(schema: "output", path: "getOrAddCaret")
+  addFile(filePath: String! textAndCarets: String! caretDelimiterLength: Int! = 9): Caret! @delegate(schema: "output", path: "addFile")
+  addKeyedText(caretId: String! key: String! textAndCarets: String! caretDelimiterLength: Int! = 9): Caret! @delegate(schema: "output", path: "addKeyedText")
+  addText(caretId: String! textAndCarets: String! caretDelimiterLength: Int! = 9): Caret! @delegate(schema: "output", path: "addText")
+  addKeyedTextByTags(tags: [CaretTagInput!]! key: String! textAndCarets: String! caretDelimiterLength: Int! = 9): [Caret!]! @delegate(schema: "output", path: "addKeyedTextByTags")
+  addTextByTags(tags: [CaretTagInput!] textAndCarets: String! caretDelimiterLength: Int! = 9): [Caret!]! @delegate(schema: "output", path: "addTextByTags")
+  log(severity: LogSeverity! message: String! arguments: [String!]): String! @delegate(schema: "log", path: "log")
+}
+
+type NestedSelection @source(name: "NestedSelection", schema: "graphql") {
+  depth: Int!
+  selection: GraphQLSelection!
+  fieldSelection: GraphQLFieldSelection
+  fragmentSpreadSelection: GraphQLFragmentSpreadSelection
+}
+
+type Query {
+  noop: String
+  caret(caretId: String!): Caret @delegate(schema: "output", path: "caret")
+  carets(tags: [CaretTagInput!]!): [Caret!]! @delegate(schema: "output", path: "carets")
+  readTextFile(textFilePath: String! fileVersion: FileVersion): String @delegate(schema: "filesystem", path: "readTextFile")
+  files(whitelist: [String!] blacklist: [String!]): [File!]! @delegate(schema: "filesystem", path: "files")
+  logNoop: Boolean! @delegate(schema: "log", path: "logNoop")
+  "Reads high-level information about things defined in GraphQL files"
+  graphQL(fileWhitelist: [String!] additionalFiles: [AdditionalFileInput!]!): GraphQLMetadata! @delegate(schema: "graphql", path: "graphQL")
+  markAsReady(processId: Int!): Boolean! @delegate(schema: "readiness", path: "markAsReady")
+}
+
+type TypeRef @source(name: "TypeRef", schema: "graphql") {
+  name: String!
+  genericArguments: [TypeRef!]!
+  text: String!
+}
+
+input AdditionalFileInput @source(name: "AdditionalFileInput", schema: "graphql") {
+  filePath: String!
+  content: String!
+}
+
+input CaretTagInput @source(name: "CaretTagInput", schema: "output") {
+  name: String!
+  value: String!
+}
+
+enum FileKind @source(name: "FileKind", schema: "filesystem") {
+  BINARY
+  TEXT
+}
+
+enum FileVersion @source(name: "FileVersion", schema: "filesystem") {
+  GENERATED
+  HEAD
+}
+
+enum GraphQLOperationType @source(name: "GraphQLOperationType", schema: "graphql") {
+  QUERY
+  MUTATION
+  SUBSCRIPTION
+}
+
+enum LogSeverity @source(name: "LogSeverity", schema: "log") {
+  TRACE
+  DEBUG
+  INFORMATION
+  WARNING
+  ERROR
+  CRITICAL
+}
+
+"Delegates a resolver to a remote schema."
+directive @delegate("The path to the field on the remote schema." path: String "The name of the schema to which this field shall be delegated to." schema: String!) on FIELD_DEFINITION
+
+"Annotates the original name of a type."
+directive @source("The original name of the annotated type." name: String! "The name of the schema to which this type belongs to." schema: String!) repeatable on OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | INTERFACE | UNION | ENUM | ENUM_VALUE | INPUT_OBJECT | INPUT_FIELD_DEFINITION
