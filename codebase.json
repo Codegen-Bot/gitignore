@@ -65,7 +65,7 @@
     },
     {
       "botId": "bot://hub/dotnet/botfactory",
-      "botVersion": "0.0.1-alpha57",
+      "botVersion": "0.0.1-alpha67",
       "configuration": {
         "id": "bot://hub/.gitignore",
         "outputPath": "GitIgnore",
