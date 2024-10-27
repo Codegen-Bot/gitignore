@@ -18,6 +18,8 @@ public class Exports
         // Note: a `Main` method is required for the app to compile
     }
 
+    private static GraphQLServer _graphqlServer = new();
+
     [UnmanagedCallersOnly(EntryPoint = "entry_point")]
     public static int Run()
     {
@@ -70,6 +72,36 @@ public class Exports
                     // Only a critical error will cause codegen.bot to realize that the generated code should not be used
                     Level = LogEventLevel.Critical,
                     Message = "Failed to initialize bot: {ExceptionType} {Message}, {StackTrace}",
+                    Args = [e.GetType().Name, e.Message, e.StackTrace ?? ""],
+                }
+            );
+            Pdk.SetError($"{e.GetType()}: {e.Message}");
+            return 0;
+        }
+    }
+
+    [UnmanagedCallersOnly(EntryPoint = "handle_request")]
+    public static int HandleRequest()
+    {
+        try
+        {
+            var request = Pdk.GetInputString();
+
+            var result = _graphqlServer.Execute(request);
+
+            Pdk.SetOutput(result);
+
+            return 0;
+        }
+        catch (Exception e)
+        {
+            Imports.Log(
+                new LogEvent()
+                {
+                    // Only a critical error will cause codegen.bot to realize that the generated code should not be used
+                    Level = LogEventLevel.Critical,
+                    Message =
+                        "Failed to handle GraphQL request: {ExceptionType} {Message}, {StackTrace}",
                     Args = [e.GetType().Name, e.Message, e.StackTrace ?? ""],
                 }
             );
