@@ -10,6 +10,8 @@ installs:
     botVersion: 1.0.0
   - botId: 'bot://parse/graphql'
     botVersion: 1.0.0
+  - botId: 'bot://core/random'
+    botVersion: 1.0.0
   - botId: 'bot://hub/.gitignore'
     botVersion: 0.0.1-alpha1
     configuration:
@@ -33,7 +35,7 @@ installs:
       - targetPath: .
         botId: 'bot://core/log'
   - botId: 'bot://hub/dotnet/botfactory'
-    botVersion: 0.0.1-alpha67
+    botVersion: 0.0.1-alpha64
     configuration:
       id: 'bot://hub/.gitignore'
       outputPath: GitIgnore

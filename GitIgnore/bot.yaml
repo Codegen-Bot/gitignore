@@ -1,0 +1,17 @@
+type: wasm
+id: 'bot://hub/.gitignore'
+readme: Bot.md
+consumedSchema: consumedSchema.graphql
+wasm: bin/Release/net8.0/wasi-wasm/AppBundle/GitIgnore.wasm
+providedSchema: providedSchema.graphql
+deduplicateConfigurationSchema: true
+dependencies:
+  'bot://core/output': 1.0.0
+  'bot://core/filesystem': 1.0.0
+  'bot://core/log': 1.0.0
+  'bot://parse/graphql': 1.0.0
+  'bot://core/ready': 1.0.0
+exec:
+  devenv: dotnet workload install wasi-experimental
+  build: dotnet build -c Release -r wasi-wasm
+  build-docker: 'docker run -v .:/src codegenbot/dotnet-bot-builder:net8.0'
