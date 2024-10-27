@@ -10,7 +10,7 @@ public class GitIgnoreMiniBot() : IMiniBot
 {
     public void Execute()
     {
-        var outputPaths = configuration.Configuration.OutputPath?.ToList();
+        var outputPaths = GraphQLClient.GetConfiguration().Configuration.OutputPath;
         if (outputPaths is null)
         {
             outputPaths = new();

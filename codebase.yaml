@@ -43,7 +43,7 @@ installs:
       language: CSHARP
       deduplicateConfigurationSchema: true
       copybots: []
-      provideApi: true
+      provideApi: false
       minimalWorkingExample: false
       dotnetVersion: DotNet8
     dependencies:
