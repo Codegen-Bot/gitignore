@@ -137,13 +137,15 @@ public partial class Mutation
             {
                 result[selection.FieldSelection.Alias ?? selection.FieldSelection.Name] =
                     AddIgnorePattern();
+                continue;
             }
-            else if (
+            if (
                 selection.FragmentSpreadSelection is not null
                 && selection.FragmentSpreadSelection.Name == "addIgnorePattern"
             )
             {
                 result[selection.FragmentSpreadSelection.Name] = AddIgnorePattern();
+                continue;
             }
         }
     }

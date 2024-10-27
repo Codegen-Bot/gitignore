@@ -35,7 +35,7 @@ installs:
       - targetPath: .
         botId: 'bot://core/log'
   - botId: 'bot://hub/dotnet/botfactory'
-    botVersion: 0.0.1-alpha64
+    botVersion: 0.0.1-alpha65
     configuration:
       id: 'bot://hub/.gitignore'
       outputPath: GitIgnore

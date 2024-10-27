@@ -34,32 +34,32 @@ public partial class GraphQLError
 [JsonSerializable(typeof(AddFileData))]
 [JsonSerializable(typeof(GraphQLResponse<AddFileData>))]
 [JsonSerializable(typeof(GraphQLRequest<AddFileVariables>))]
-[JsonSerializable(typeof(AddFile))]
+[JsonSerializable(typeof(AddFileAddFile))]
 [JsonSerializable(typeof(AddKeyedTextVariables))]
 [JsonSerializable(typeof(AddKeyedTextData))]
 [JsonSerializable(typeof(GraphQLResponse<AddKeyedTextData>))]
 [JsonSerializable(typeof(GraphQLRequest<AddKeyedTextVariables>))]
-[JsonSerializable(typeof(AddKeyedText))]
+[JsonSerializable(typeof(AddKeyedTextAddKeyedText))]
 [JsonSerializable(typeof(AddKeyedTextByTagsVariables))]
 [JsonSerializable(typeof(AddKeyedTextByTagsData))]
 [JsonSerializable(typeof(GraphQLResponse<AddKeyedTextByTagsData>))]
 [JsonSerializable(typeof(GraphQLRequest<AddKeyedTextByTagsVariables>))]
-[JsonSerializable(typeof(AddKeyedTextByTags))]
+[JsonSerializable(typeof(AddKeyedTextByTagsAddKeyedTextByTags))]
 [JsonSerializable(typeof(AddTextVariables))]
 [JsonSerializable(typeof(AddTextData))]
 [JsonSerializable(typeof(GraphQLResponse<AddTextData>))]
 [JsonSerializable(typeof(GraphQLRequest<AddTextVariables>))]
-[JsonSerializable(typeof(AddText))]
+[JsonSerializable(typeof(AddTextAddText))]
 [JsonSerializable(typeof(AddTextByTagsVariables))]
 [JsonSerializable(typeof(AddTextByTagsData))]
 [JsonSerializable(typeof(GraphQLResponse<AddTextByTagsData>))]
 [JsonSerializable(typeof(GraphQLRequest<AddTextByTagsVariables>))]
-[JsonSerializable(typeof(AddTextByTags))]
+[JsonSerializable(typeof(AddTextByTagsAddTextByTags))]
 [JsonSerializable(typeof(GetFilesVariables))]
 [JsonSerializable(typeof(GetFilesData))]
 [JsonSerializable(typeof(GraphQLResponse<GetFilesData>))]
 [JsonSerializable(typeof(GraphQLRequest<GetFilesVariables>))]
-[JsonSerializable(typeof(GetFiles))]
+[JsonSerializable(typeof(GetFilesFiles))]
 [JsonSerializable(typeof(LogVariables))]
 [JsonSerializable(typeof(LogData))]
 [JsonSerializable(typeof(GraphQLResponse<LogData>))]
@@ -68,14 +68,10 @@ public partial class GraphQLError
 [JsonSerializable(typeof(ParseGraphQLOperationData))]
 [JsonSerializable(typeof(GraphQLResponse<ParseGraphQLOperationData>))]
 [JsonSerializable(typeof(GraphQLRequest<ParseGraphQLOperationVariables>))]
-[JsonSerializable(typeof(ParseGraphQLOperation))]
-[JsonSerializable(typeof(ParseGraphQLOperationOperation))]
-[JsonSerializable(typeof(ParseGraphQLOperationOperationVariable))]
-[JsonSerializable(typeof(ParseGraphQLOperationOperationVariableType))]
-[JsonSerializable(typeof(ParseGraphQLOperationOperationNestedSelection))]
-[JsonSerializable(typeof(ParseGraphQLOperationOperationNestedSelectionFieldSelection))]
-[JsonSerializable(typeof(ParseGraphQLOperationOperationNestedSelectionFieldSelectionArgument))]
-[JsonSerializable(typeof(ParseGraphQLOperationOperationNestedSelectionFragmentSpreadSelection))]
+[JsonSerializable(typeof(ParseGraphQLOperationGraphQL))]
+[JsonSerializable(typeof(ParseGraphQLOperationGraphQLOperations))]
+[JsonSerializable(typeof(ParseGraphQLOperationGraphQLOperationsVariables))]
+[JsonSerializable(typeof(ParseGraphQLOperationGraphQLOperationsVariablesType))]
 [JsonSerializable(typeof(ReadTextFileVariables))]
 [JsonSerializable(typeof(ReadTextFileData))]
 [JsonSerializable(typeof(GraphQLResponse<ReadTextFileData>))]
@@ -107,6 +103,7 @@ public static partial class GraphQLClient
             request,
             GraphQLClientJsonSerializerContext.Default.GraphQLRequestAddFileVariables
         );
+        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
         var result = JsonSerializer.Deserialize<GraphQLResponse<AddFileData>>(
             response,
             GraphQLClientJsonSerializerContext.Default.GraphQLResponseAddFileData
@@ -139,6 +136,7 @@ public static partial class GraphQLClient
             request,
             GraphQLClientJsonSerializerContext.Default.GraphQLRequestAddKeyedTextVariables
         );
+        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
         var result = JsonSerializer.Deserialize<GraphQLResponse<AddKeyedTextData>>(
             response,
             GraphQLClientJsonSerializerContext.Default.GraphQLResponseAddKeyedTextData
@@ -175,6 +173,7 @@ public static partial class GraphQLClient
             request,
             GraphQLClientJsonSerializerContext.Default.GraphQLRequestAddKeyedTextByTagsVariables
         );
+        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
         var result = JsonSerializer.Deserialize<GraphQLResponse<AddKeyedTextByTagsData>>(
             response,
             GraphQLClientJsonSerializerContext.Default.GraphQLResponseAddKeyedTextByTagsData
@@ -204,6 +203,7 @@ public static partial class GraphQLClient
             request,
             GraphQLClientJsonSerializerContext.Default.GraphQLRequestAddTextVariables
         );
+        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
         var result = JsonSerializer.Deserialize<GraphQLResponse<AddTextData>>(
             response,
             GraphQLClientJsonSerializerContext.Default.GraphQLResponseAddTextData
@@ -231,6 +231,7 @@ public static partial class GraphQLClient
             request,
             GraphQLClientJsonSerializerContext.Default.GraphQLRequestAddTextByTagsVariables
         );
+        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
         var result = JsonSerializer.Deserialize<GraphQLResponse<AddTextByTagsData>>(
             response,
             GraphQLClientJsonSerializerContext.Default.GraphQLResponseAddTextByTagsData
@@ -259,6 +260,7 @@ public static partial class GraphQLClient
             request,
             GraphQLClientJsonSerializerContext.Default.GraphQLRequestGetFilesVariables
         );
+        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
         var result = JsonSerializer.Deserialize<GraphQLResponse<GetFilesData>>(
             response,
             GraphQLClientJsonSerializerContext.Default.GraphQLResponseGetFilesData
@@ -289,6 +291,7 @@ public static partial class GraphQLClient
             request,
             GraphQLClientJsonSerializerContext.Default.GraphQLRequestLogVariables
         );
+        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
         var result = JsonSerializer.Deserialize<GraphQLResponse<LogData>>(
             response,
             GraphQLClientJsonSerializerContext.Default.GraphQLResponseLogData
@@ -343,6 +346,7 @@ public static partial class GraphQLClient
             request,
             GraphQLClientJsonSerializerContext.Default.GraphQLRequestParseGraphQLOperationVariables
         );
+        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
         var result = JsonSerializer.Deserialize<GraphQLResponse<ParseGraphQLOperationData>>(
             response,
             GraphQLClientJsonSerializerContext.Default.GraphQLResponseParseGraphQLOperationData
@@ -370,6 +374,7 @@ public static partial class GraphQLClient
             request,
             GraphQLClientJsonSerializerContext.Default.GraphQLRequestReadTextFileVariables
         );
+        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
         var result = JsonSerializer.Deserialize<GraphQLResponse<ReadTextFileData>>(
             response,
             GraphQLClientJsonSerializerContext.Default.GraphQLResponseReadTextFileData
@@ -455,7 +460,7 @@ public partial class CaretTagInput
 public partial class AddFileData
 {
     [JsonPropertyName("addFile")]
-    public required AddFile AddFile { get; set; }
+    public required AddFileAddFile AddFile { get; set; }
 }
 
 public partial class AddFileVariables
@@ -467,7 +472,7 @@ public partial class AddFileVariables
     public required string TextAndCarets { get; set; }
 }
 
-public partial class AddFile
+public partial class AddFileAddFile
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -476,7 +481,7 @@ public partial class AddFile
 public partial class AddKeyedTextData
 {
     [JsonPropertyName("addKeyedText")]
-    public required AddKeyedText AddKeyedText { get; set; }
+    public required AddKeyedTextAddKeyedText AddKeyedText { get; set; }
 }
 
 public partial class AddKeyedTextVariables
@@ -491,7 +496,7 @@ public partial class AddKeyedTextVariables
     public required string TextAndCarets { get; set; }
 }
 
-public partial class AddKeyedText
+public partial class AddKeyedTextAddKeyedText
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -500,7 +505,7 @@ public partial class AddKeyedText
 public partial class AddKeyedTextByTagsData
 {
     [JsonPropertyName("addKeyedTextByTags")]
-    public required List<AddKeyedTextByTags> AddKeyedTextByTags { get; set; }
+    public required List<AddKeyedTextByTagsAddKeyedTextByTags> AddKeyedTextByTags { get; set; }
 }
 
 public partial class AddKeyedTextByTagsVariables
@@ -515,7 +520,7 @@ public partial class AddKeyedTextByTagsVariables
     public required string TextAndCarets { get; set; }
 }
 
-public partial class AddKeyedTextByTags
+public partial class AddKeyedTextByTagsAddKeyedTextByTags
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -524,7 +529,7 @@ public partial class AddKeyedTextByTags
 public partial class AddTextData
 {
     [JsonPropertyName("addText")]
-    public required AddText AddText { get; set; }
+    public required AddTextAddText AddText { get; set; }
 }
 
 public partial class AddTextVariables
@@ -536,7 +541,7 @@ public partial class AddTextVariables
     public required string TextAndCarets { get; set; }
 }
 
-public partial class AddText
+public partial class AddTextAddText
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -545,7 +550,7 @@ public partial class AddText
 public partial class AddTextByTagsData
 {
     [JsonPropertyName("addTextByTags")]
-    public required List<AddTextByTags> AddTextByTags { get; set; }
+    public required List<AddTextByTagsAddTextByTags> AddTextByTags { get; set; }
 }
 
 public partial class AddTextByTagsVariables
@@ -557,7 +562,7 @@ public partial class AddTextByTagsVariables
     public required string TextAndCarets { get; set; }
 }
 
-public partial class AddTextByTags
+public partial class AddTextByTagsAddTextByTags
 {
     [JsonPropertyName("id")]
     public required string Id { get; set; }
@@ -566,7 +571,7 @@ public partial class AddTextByTags
 public partial class GetFilesData
 {
     [JsonPropertyName("files")]
-    public required List<GetFiles> Files { get; set; }
+    public required List<GetFilesFiles> Files { get; set; }
 }
 
 public partial class GetFilesVariables
@@ -578,7 +583,7 @@ public partial class GetFilesVariables
     public required List<string> Blacklist { get; set; }
 }
 
-public partial class GetFiles
+public partial class GetFilesFiles
 {
     [JsonPropertyName("path")]
     public required string Path { get; set; }
@@ -608,7 +613,7 @@ public partial class LogVariables
 public partial class ParseGraphQLOperationData
 {
     [JsonPropertyName("graphQL")]
-    public required ParseGraphQLOperation GraphQL { get; set; }
+    public required ParseGraphQLOperationGraphQL GraphQL { get; set; }
 }
 
 public partial class ParseGraphQLOperationVariables
@@ -617,13 +622,13 @@ public partial class ParseGraphQLOperationVariables
     public required List<AdditionalFileInput> Graphql { get; set; }
 }
 
-public partial class ParseGraphQLOperation
+public partial class ParseGraphQLOperationGraphQL
 {
     [JsonPropertyName("operations")]
-    public required List<ParseGraphQLOperationOperation> Operations { get; set; }
+    public required List<ParseGraphQLOperationGraphQLOperations> Operations { get; set; }
 }
 
-public partial class ParseGraphQLOperationOperation
+public partial class ParseGraphQLOperationGraphQLOperations
 {
     [JsonPropertyName("name")]
     public string? Name { get; set; }
@@ -635,64 +640,22 @@ public partial class ParseGraphQLOperationOperation
     public required string Text { get; set; }
 
     [JsonPropertyName("variables")]
-    public required List<ParseGraphQLOperationOperationVariable> Variables { get; set; }
-
-    [JsonPropertyName("nestedSelection")]
-    public required List<ParseGraphQLOperationOperationNestedSelection> NestedSelection { get; set; }
+    public required List<ParseGraphQLOperationGraphQLOperationsVariables> Variables { get; set; }
 }
 
-public partial class ParseGraphQLOperationOperationVariable
+public partial class ParseGraphQLOperationGraphQLOperationsVariables
 {
     [JsonPropertyName("name")]
     public required string Name { get; set; }
 
     [JsonPropertyName("type")]
-    public required ParseGraphQLOperationOperationVariableType Type { get; set; }
+    public required ParseGraphQLOperationGraphQLOperationsVariablesType Type { get; set; }
 }
 
-public partial class ParseGraphQLOperationOperationVariableType
+public partial class ParseGraphQLOperationGraphQLOperationsVariablesType
 {
     [JsonPropertyName("text")]
     public required string Text { get; set; }
-}
-
-public partial class ParseGraphQLOperationOperationNestedSelection
-{
-    [JsonPropertyName("depth")]
-    public required int Depth { get; set; }
-
-    [JsonPropertyName("fieldSelection")]
-    public ParseGraphQLOperationOperationNestedSelectionFieldSelection? FieldSelection { get; set; }
-
-    [JsonPropertyName("fragmentSpreadSelection")]
-    public ParseGraphQLOperationOperationNestedSelectionFragmentSpreadSelection? FragmentSpreadSelection { get; set; }
-}
-
-public partial class ParseGraphQLOperationOperationNestedSelectionFieldSelection
-{
-    [JsonPropertyName("name")]
-    public required string Name { get; set; }
-
-    [JsonPropertyName("alias")]
-    public string? Alias { get; set; }
-
-    [JsonPropertyName("arguments")]
-    public required List<ParseGraphQLOperationOperationNestedSelectionFieldSelectionArgument> Arguments { get; set; }
-}
-
-public partial class ParseGraphQLOperationOperationNestedSelectionFieldSelectionArgument
-{
-    [JsonPropertyName("name")]
-    public required string Name { get; set; }
-
-    [JsonPropertyName("value")]
-    public required string Value { get; set; }
-}
-
-public partial class ParseGraphQLOperationOperationNestedSelectionFragmentSpreadSelection
-{
-    [JsonPropertyName("name")]
-    public required string Name { get; set; }
 }
 
 public partial class ReadTextFileData
