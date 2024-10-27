@@ -525,7 +525,7 @@ public partial class GetConfigurationVariables { }
 public partial class GetConfigurationConfiguration
 {
     [JsonPropertyName("outputPath")]
-    public required string OutputPath { get; set; }
+    public List<string>? OutputPath { get; set; }
 }
 
 public partial class GetFilesData
