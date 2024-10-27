@@ -26,9 +26,7 @@ public partial class GraphQLError
 [JsonSerializable(typeof(GraphQLError))]
 [JsonSerializable(typeof(FileKind))]
 [JsonSerializable(typeof(FileVersion))]
-[JsonSerializable(typeof(GraphQLOperationType))]
 [JsonSerializable(typeof(LogSeverity))]
-[JsonSerializable(typeof(AdditionalFileInput))]
 [JsonSerializable(typeof(CaretTagInput))]
 [JsonSerializable(typeof(AddFileVariables))]
 [JsonSerializable(typeof(AddFileData))]
@@ -55,6 +53,11 @@ public partial class GraphQLError
 [JsonSerializable(typeof(GraphQLResponse<AddTextByTagsData>))]
 [JsonSerializable(typeof(GraphQLRequest<AddTextByTagsVariables>))]
 [JsonSerializable(typeof(AddTextByTagsAddTextByTags))]
+[JsonSerializable(typeof(GetConfigurationVariables))]
+[JsonSerializable(typeof(GetConfigurationData))]
+[JsonSerializable(typeof(GraphQLResponse<GetConfigurationData>))]
+[JsonSerializable(typeof(GraphQLRequest<GetConfigurationVariables>))]
+[JsonSerializable(typeof(GetConfigurationConfiguration))]
 [JsonSerializable(typeof(GetFilesVariables))]
 [JsonSerializable(typeof(GetFilesData))]
 [JsonSerializable(typeof(GraphQLResponse<GetFilesData>))]
@@ -64,14 +67,6 @@ public partial class GraphQLError
 [JsonSerializable(typeof(LogData))]
 [JsonSerializable(typeof(GraphQLResponse<LogData>))]
 [JsonSerializable(typeof(GraphQLRequest<LogVariables>))]
-[JsonSerializable(typeof(ParseGraphQLOperationVariables))]
-[JsonSerializable(typeof(ParseGraphQLOperationData))]
-[JsonSerializable(typeof(GraphQLResponse<ParseGraphQLOperationData>))]
-[JsonSerializable(typeof(GraphQLRequest<ParseGraphQLOperationVariables>))]
-[JsonSerializable(typeof(ParseGraphQLOperationGraphQL))]
-[JsonSerializable(typeof(ParseGraphQLOperationGraphQLOperations))]
-[JsonSerializable(typeof(ParseGraphQLOperationGraphQLOperationsVariables))]
-[JsonSerializable(typeof(ParseGraphQLOperationGraphQLOperationsVariablesType))]
 [JsonSerializable(typeof(ReadTextFileVariables))]
 [JsonSerializable(typeof(ReadTextFileData))]
 [JsonSerializable(typeof(GraphQLResponse<ReadTextFileData>))]
@@ -240,6 +235,36 @@ public static partial class GraphQLClient
             ?? throw new InvalidOperationException("Received null data for request AddTextByTags.");
     }
 
+    public static GetConfigurationData GetConfiguration()
+    {
+        var request = new GraphQLRequest<GetConfigurationVariables>
+        {
+            Query = """
+                query GetConfiguration {
+                  configuration {
+                    outputPath
+                  }
+                }
+                """,
+            OperationName = "GetConfiguration",
+            Variables = new GetConfigurationVariables() { },
+        };
+
+        var response = Imports.GraphQL(
+            request,
+            GraphQLClientJsonSerializerContext.Default.GraphQLRequestGetConfigurationVariables
+        );
+        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
+        var result = JsonSerializer.Deserialize<GraphQLResponse<GetConfigurationData>>(
+            response,
+            GraphQLClientJsonSerializerContext.Default.GraphQLResponseGetConfigurationData
+        );
+        return result?.Data
+            ?? throw new InvalidOperationException(
+                "Received null data for request GetConfiguration."
+            );
+    }
+
     public static GetFilesData GetFiles(List<string> whitelist, List<string> blacklist)
     {
         var request = new GraphQLRequest<GetFilesVariables>
@@ -300,63 +325,6 @@ public static partial class GraphQLClient
             ?? throw new InvalidOperationException("Received null data for request Log.");
     }
 
-    public static ParseGraphQLOperationData ParseGraphQLOperation(List<AdditionalFileInput> graphql)
-    {
-        var request = new GraphQLRequest<ParseGraphQLOperationVariables>
-        {
-            Query = """
-                query ParseGraphQLOperation($graphql: [AdditionalFileInput!]!) {
-                  graphQL(additionalFiles: $graphql) {
-                    operations {
-                      name
-                      operationType
-                      text
-                      variables {
-                        name
-                        type {
-                          text
-                        }
-                      }
-                      nestedSelection {
-                        depth
-                        fieldSelection {
-                          name
-                          alias
-                          arguments {
-                            name
-                            type {
-                              text
-                            }
-                            value
-                          }
-                        }
-                        fragmentSpreadSelection {
-                          name
-                        }
-                      }
-                    }
-                  }
-                }
-                """,
-            OperationName = "ParseGraphQLOperation",
-            Variables = new ParseGraphQLOperationVariables() { Graphql = graphql },
-        };
-
-        var response = Imports.GraphQL(
-            request,
-            GraphQLClientJsonSerializerContext.Default.GraphQLRequestParseGraphQLOperationVariables
-        );
-        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
-        var result = JsonSerializer.Deserialize<GraphQLResponse<ParseGraphQLOperationData>>(
-            response,
-            GraphQLClientJsonSerializerContext.Default.GraphQLResponseParseGraphQLOperationData
-        );
-        return result?.Data
-            ?? throw new InvalidOperationException(
-                "Received null data for request ParseGraphQLOperation."
-            );
-    }
-
     public static ReadTextFileData ReadTextFile(string textFilePath)
     {
         var request = new GraphQLRequest<ReadTextFileVariables>
@@ -405,19 +373,6 @@ public enum FileVersion
 }
 
 [JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumMemberConverter))]
-public enum GraphQLOperationType
-{
-    [EnumMember(Value = "QUERY")]
-    QUERY,
-
-    [EnumMember(Value = "MUTATION")]
-    MUTATION,
-
-    [EnumMember(Value = "SUBSCRIPTION")]
-    SUBSCRIPTION,
-}
-
-[JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumMemberConverter))]
 public enum LogSeverity
 {
     [EnumMember(Value = "TRACE")]
@@ -437,15 +392,6 @@ public enum LogSeverity
 
     [EnumMember(Value = "CRITICAL")]
     CRITICAL,
-}
-
-public partial class AdditionalFileInput
-{
-    [JsonPropertyName("filePath")]
-    public required string FilePath { get; set; }
-
-    [JsonPropertyName("content")]
-    public required string Content { get; set; }
 }
 
 public partial class CaretTagInput
@@ -568,6 +514,20 @@ public partial class AddTextByTagsAddTextByTags
     public required string Id { get; set; }
 }
 
+public partial class GetConfigurationData
+{
+    [JsonPropertyName("configuration")]
+    public required GetConfigurationConfiguration Configuration { get; set; }
+}
+
+public partial class GetConfigurationVariables { }
+
+public partial class GetConfigurationConfiguration
+{
+    [JsonPropertyName("outputPath")]
+    public required string OutputPath { get; set; }
+}
+
 public partial class GetFilesData
 {
     [JsonPropertyName("files")]
@@ -608,54 +568,6 @@ public partial class LogVariables
 
     [JsonPropertyName("arguments")]
     public List<string>? Arguments { get; set; }
-}
-
-public partial class ParseGraphQLOperationData
-{
-    [JsonPropertyName("graphQL")]
-    public required ParseGraphQLOperationGraphQL GraphQL { get; set; }
-}
-
-public partial class ParseGraphQLOperationVariables
-{
-    [JsonPropertyName("graphql")]
-    public required List<AdditionalFileInput> Graphql { get; set; }
-}
-
-public partial class ParseGraphQLOperationGraphQL
-{
-    [JsonPropertyName("operations")]
-    public required List<ParseGraphQLOperationGraphQLOperations> Operations { get; set; }
-}
-
-public partial class ParseGraphQLOperationGraphQLOperations
-{
-    [JsonPropertyName("name")]
-    public string? Name { get; set; }
-
-    [JsonPropertyName("operationType")]
-    public required GraphQLOperationType OperationType { get; set; }
-
-    [JsonPropertyName("text")]
-    public required string Text { get; set; }
-
-    [JsonPropertyName("variables")]
-    public required List<ParseGraphQLOperationGraphQLOperationsVariables> Variables { get; set; }
-}
-
-public partial class ParseGraphQLOperationGraphQLOperationsVariables
-{
-    [JsonPropertyName("name")]
-    public required string Name { get; set; }
-
-    [JsonPropertyName("type")]
-    public required ParseGraphQLOperationGraphQLOperationsVariablesType Type { get; set; }
-}
-
-public partial class ParseGraphQLOperationGraphQLOperationsVariablesType
-{
-    [JsonPropertyName("text")]
-    public required string Text { get; set; }
 }
 
 public partial class ReadTextFileData
