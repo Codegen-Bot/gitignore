@@ -3,13 +3,12 @@ readme: Bot.md
 configurationSchema: configurationSchema.graphql
 consumedSchema: consumedSchema.graphql
 wasm: bin/Release/net8.0/wasi-wasm/AppBundle/GitIgnore.wasm
-providedSchema: providedSchema.graphql
+
 deduplicateConfigurationSchema: true
 dependencies:
   'bot://core/output': 1.0.0
   'bot://core/filesystem': 1.0.0
   'bot://core/log': 1.0.0
-  'bot://parse/graphql': 1.0.0
   
 exec:
   devenv: dotnet workload install wasi-experimental
