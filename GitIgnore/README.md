@@ -14,7 +14,7 @@ This bot can be built by doing the following:
 ```shell
 dotnet workload install wasi-experimental
 dotnet build -c Release -r wasi-wasm
-codegen.bot push
+bots push
 ```
 
 Alternatively, you can use [a docker image specifically designed for building .NET bots](https://hub.docker.com/r/codegenbot/dotnet-bot-builder) like this:

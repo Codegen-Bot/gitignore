@@ -21,15 +21,18 @@ public class Exports
     [UnmanagedCallersOnly(EntryPoint = "entry_point")]
     public static int Run()
     {
+        var imports = new CodegenBotImports();
+        var graphQLClient = new GraphQLClient(imports);
+
         try
         {
             // Create all our minibots here
             IMiniBot[] miniBots =
             [
                 // TODO - remove the ExampleMiniBot entry from this list because it creates a hello world file
-                // that won't be useful in real life, and could even be harmful if you're writing to configuration.OutputPath elsewhere,
+                // that won't be useful in real life, and could cause problems if you're writing to configuration.OutputPath elsewhere,
                 // or if you're assuming configuration.OutputPath is a directory and you're writing to files under it.
-                new ExampleMiniBot(),
+                new ExampleMiniBot(graphQLClient),
             ];
 
             // Run each minibot in order
@@ -41,7 +44,7 @@ public class Exports
                 }
                 catch (Exception e)
                 {
-                    Imports.Log(
+                    imports.Log(
                         new LogEvent()
                         {
                             // Only a critical error will cause codegen.bot to realize that the generated code should not be used
@@ -64,7 +67,7 @@ public class Exports
         }
         catch (Exception e)
         {
-            Imports.Log(
+            imports.Log(
                 new LogEvent()
                 {
                     // Only a critical error will cause codegen.bot to realize that the generated code should not be used

@@ -43,6 +43,7 @@ type Query {
   noop: String
   caret(caretId: String!): Caret @delegate(schema: "output", path: "caret")
   carets(tags: [CaretTagInput!]!): [Caret!]! @delegate(schema: "output", path: "carets")
+  directoryExists(path: String!): Boolean! @delegate(schema: "filesystem", path: "directoryExists")
   readTextFile(textFilePath: String! fileVersion: FileVersion): String @delegate(schema: "filesystem", path: "readTextFile")
   files(whitelist: [String!] blacklist: [String!]): [File!]! @delegate(schema: "filesystem", path: "files")
   logNoop: Boolean! @delegate(schema: "log", path: "logNoop")
