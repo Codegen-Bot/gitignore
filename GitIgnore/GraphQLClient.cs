@@ -75,6 +75,8 @@ public partial class GraphQLClientJsonSerializerContext : JsonSerializerContext 
 
 public static partial class GraphQLClient
 {
+    static CodegenBotImports Imports = new CodegenBotImports();
+
     public static AddFileData AddFile(string filePath, string textAndCarets)
     {
         var request = new GraphQLRequest<AddFileVariables>

@@ -21,6 +21,7 @@ public class Exports
     [UnmanagedCallersOnly(EntryPoint = "entry_point")]
     public static int Run()
     {
+        var Imports = new CodegenBotImports();
         try
         {
             // Create all our minibots here

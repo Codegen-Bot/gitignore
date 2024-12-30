@@ -10,6 +10,8 @@ public class GitIgnoreMiniBot() : IMiniBot
 {
     public void Execute()
     {
+        var Imports = new CodegenBotImports();
+
         var outputPaths = GraphQLClient.GetConfiguration().Configuration.OutputPath;
         if (outputPaths is null)
         {
@@ -40,7 +42,7 @@ public class GitIgnoreMiniBot() : IMiniBot
             GraphQLClient.AddFile(
                 path,
                 $$"""
-                  {{CaretRef.New(new CaretTag("location", path))}}
+                  {{CaretRef.New(separator: "\n", tags: new CaretTag("location", path))}}
 
                   """
             );
