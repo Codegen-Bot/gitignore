@@ -6,13 +6,13 @@ using System.Linq;
 
 namespace GitIgnore;
 
-public class GitIgnoreMiniBot() : IMiniBot
+public class GitIgnoreMiniBot(IGraphQLClient graphQLClient) : IMiniBot
 {
     public void Execute()
     {
         var Imports = new CodegenBotImports();
 
-        var outputPaths = GraphQLClient.GetConfiguration().Configuration.OutputPath;
+        var outputPaths = graphQLClient.GetConfiguration().Configuration.OutputPath;
         if (outputPaths is null)
         {
             outputPaths = new();
@@ -39,7 +39,7 @@ public class GitIgnoreMiniBot() : IMiniBot
                 Args = [path]
             });
             
-            GraphQLClient.AddFile(
+            graphQLClient.AddFile(
                 path,
                 $$"""
                   {{CaretRef.New(separator: "\n", tags: new CaretTag("location", path))}}

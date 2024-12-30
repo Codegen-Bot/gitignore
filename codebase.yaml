@@ -13,7 +13,7 @@ installs:
   - botId: 'bot://core/random'
     botVersion: 1.0.0
   - botId: 'bot://hub/.gitignore'
-    botVersion: 0.0.1-alpha1
+    botVersion: 0.0.1-alpha7
     configuration:
       outputPath: null
     dependencies:
@@ -24,7 +24,7 @@ installs:
       - targetPath: .
         botId: 'bot://core/log'
   - botId: 'bot://hub/dotnet/solution'
-    botVersion: 0.0.1-alpha1
+    botVersion: 0.0.1-alpha6
     configuration:
       outputPath: GitIgnore.sln
     dependencies:
@@ -35,7 +35,7 @@ installs:
       - targetPath: .
         botId: 'bot://core/log'
   - botId: 'bot://hub/dotnet/botfactory'
-    botVersion: 0.0.1-alpha65
+    botVersion: 0.0.1-alpha9
     configuration:
       id: 'bot://hub/.gitignore'
       outputPath: GitIgnore

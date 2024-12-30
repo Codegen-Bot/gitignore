@@ -21,13 +21,15 @@ public class Exports
     [UnmanagedCallersOnly(EntryPoint = "entry_point")]
     public static int Run()
     {
-        var Imports = new CodegenBotImports();
+        var imports = new CodegenBotImports();
+        var graphQLClient = new WasmGraphQLClient(imports);
+
         try
         {
             // Create all our minibots here
             IMiniBot[] miniBots =
             [
-                new GitIgnoreMiniBot(),
+                new GitIgnoreMiniBot(graphQLClient),
             ];
 
             // Run each minibot in order
@@ -39,7 +41,7 @@ public class Exports
                 }
                 catch (Exception e)
                 {
-                    Imports.Log(
+                    imports.Log(
                         new LogEvent()
                         {
                             // Only a critical error will cause codegen.bot to realize that the generated code should not be used
@@ -62,7 +64,7 @@ public class Exports
         }
         catch (Exception e)
         {
-            Imports.Log(
+            imports.Log(
                 new LogEvent()
                 {
                     // Only a critical error will cause codegen.bot to realize that the generated code should not be used
