@@ -27,7 +27,7 @@ public class Exports
         return RunBot(graphQLClient, null);
     }
 
-    private static GraphQLServer _graphqlServer = new();
+    private static GraphQLServer? _graphqlServer;
 
     public static int RunBot(IGraphQLClient graphQLClient, ICodegenBotImports? imports)
     {
@@ -133,6 +133,15 @@ public class Exports
 
         try
         {
+            if (_graphqlServer is null)
+            {
+                var services = new ServiceCollection();
+                services.AddSingleton<IGraphQLClient>(graphQLClient);
+
+                var serviceProvider = services.BuildServiceProvider();
+                _graphqlServer = new GraphQLServer(serviceProvider);
+            }
+
             var request = Pdk.GetInputString();
 
             var result = _graphqlServer.ProcessGraphQLRequest(request);
