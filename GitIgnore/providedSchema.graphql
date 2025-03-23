@@ -3,6 +3,10 @@ schema {
   mutation: Mutation
 }
 
+type Query {
+  hasIgnoreFile(folder: String): Boolean!
+}
+
 type Mutation {
   addIgnorePattern(folder: String pattern: String!): Boolean!
 }

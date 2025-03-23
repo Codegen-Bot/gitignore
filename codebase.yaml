@@ -34,7 +34,7 @@ pipelines:
         - botId: bot://core/filesystem
         - botId: bot://core/log
       - botId: bot://hub/dotnet/botfactory
-        botVersion: 0.0.1-alpha93
+        botVersion: 0.0.1-alpha94
         configuration:
           id: bot://hub/.gitignore
           language: CSHARP
