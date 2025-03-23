@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using CodegenBot;
 using Extism;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GitIgnore;
 
