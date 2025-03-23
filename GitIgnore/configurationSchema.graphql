@@ -8,9 +8,4 @@ and prefer convention over configuration. That helps keep bots easy to use, focu
 and easy to refactor.
 """
 type Configuration {
-  """
-  It's best to add documentation strings for your fields, because they are displayed
-  when codegen.bot prompts the bot user for each value.
-  """
-  outputPath: String!
 }

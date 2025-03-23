@@ -4,5 +4,5 @@ schema {
 }
 
 type Mutation {
-  addIgnorePattern(folder: String pattern: String!): String!
+  addIgnorePattern(folder: String pattern: String!): Boolean!
 }
