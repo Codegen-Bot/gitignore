@@ -2,12 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading;
 using CodegenBot;
 using Extism;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace GitIgnore;
 
@@ -17,15 +25,41 @@ namespace GitIgnore;
 /// </summary>
 public class Exports
 {
+    private static IApplication _app;
+
     public static int Main(string[] args)
     {
-        var url = BotDebugUtility.FindBotDebugUrl(Environment.CurrentDirectory);
-        var httpClient = new HttpClient() { BaseAddress = new Uri(url) };
-        var graphQLClient = new SyncHttpGraphQLClient(httpClient, url);
+        var consumedUrl = BotDebugUtility.FindBotDebugUrl(Environment.CurrentDirectory);
+        var httpClient = new HttpClient() { BaseAddress = new Uri(consumedUrl) };
+        var graphQLClient = new SyncHttpGraphQLClient(httpClient, consumedUrl);
 
-        graphQLClient.MarkAsReady(Process.GetCurrentProcess().Id);
+        var builder = WebApplication.CreateBuilder([]);
 
-        return RunBot(graphQLClient, null);
+        builder.WebHost.UseUrls($"http://127.0.0.1:0");
+
+        builder.Logging.ClearProviders();
+
+        _app = builder.Build();
+
+        _app.MapPost("/graphql", async (HttpContext context) => HandleRequest());
+
+        _app.Run(_cts);
+
+        var server = app.Services.GetRequiredService<IServer>();
+        var addressFeature = server.Features.Get<IServerAddressesFeature>();
+        var providedUrl = addressFeature!.Addresses.First();
+
+        graphQLClient.MarkAsReady(Process.GetCurrentProcess().Id, providedUrl);
+
+        var result = RunBot(graphQLClient, null);
+    }
+
+    private CancellationTokenSource _cts = new();
+
+    [UnmanagedCallersOnly(EntryPoint = "stop_running")]
+    public static int StopRunning()
+    {
+        _cts.Cancel();
     }
 
     private static GraphQLServer? _graphqlServer;
@@ -126,12 +160,8 @@ public class Exports
         return RunBot(graphQLClient, imports);
     }
 
-    [UnmanagedCallersOnly(EntryPoint = "handle_request")]
-    public static int HandleRequest()
+    public static string ProcessGraphQLRequest(string request, IGraphQLClient graphqlClient)
     {
-        var imports = new CodegenBotImports();
-        var graphQLClient = new WasmGraphQLClient(imports);
-
         try
         {
             if (_graphqlServer is null)
@@ -144,13 +174,7 @@ public class Exports
                 _graphqlServer = new GraphQLServer(serviceProvider);
             }
 
-            var request = Pdk.GetInputString();
-
-            var result = _graphqlServer.ProcessGraphQLRequest(request);
-
-            Pdk.SetOutput(result);
-
-            return 0;
+            return _graphqlServer.ProcessGraphQLRequest(request);
         }
         catch (Exception e)
         {
@@ -177,7 +201,22 @@ public class Exports
                 );
                 Console.WriteLine($"{e.GetType()}: {e.Message}");
             }
-            return 0;
+            return "";
         }
+    }
+
+    [UnmanagedCallersOnly(EntryPoint = "handle_request")]
+    public static int HandleRequest()
+    {
+        var imports = new CodegenBotImports();
+        var graphQLClient = new WasmGraphQLClient(imports);
+
+        var request = Pdk.GetInputString();
+
+        var result = ProcessGraphQLRequest(request, graphQLClient);
+
+        Pdk.SetOutput(result);
+
+        return 0;
     }
 }
