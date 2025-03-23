@@ -25,7 +25,7 @@ namespace GitIgnore;
 /// </summary>
 public class Exports
 {
-    private static WebApplication _app;
+    private static WebApplication? _app;
 
     public static int Main(string[] args)
     {
@@ -53,7 +53,7 @@ public class Exports
             }
         );
 
-        _app.Run(_cts.Token);
+        _app.Start();
 
         var server = _app.Services.GetRequiredService<IServer>();
         var addressFeature = server.Features.Get<IServerAddressesFeature>();
@@ -64,12 +64,10 @@ public class Exports
         var result = RunBot(graphQLClient, null);
     }
 
-    private static CancellationTokenSource _cts = new();
-
     [UnmanagedCallersOnly(EntryPoint = "stop_running")]
     public static int StopRunning()
     {
-        _cts.Cancel();
+        _app?.Lifetime.StopApplication();
     }
 
     private static GraphQLServer? _graphqlServer;
