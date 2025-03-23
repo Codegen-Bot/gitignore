@@ -129,13 +129,13 @@ public class Exports
     public static int HandleRequest()
     {
         var imports = new CodegenBotImports();
-        var graphQLClient = new GraphQLClient(imports);
+        var graphQLClient = new GraphQLServer();
 
         try
         {
             var request = Pdk.GetInputString();
 
-            var result = _graphqlServer.Execute(request);
+            var result = _graphqlServer.ProcessGraphQLRequest(request);
 
             Pdk.SetOutput(result);
 
