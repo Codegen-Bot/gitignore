@@ -8,6 +8,66 @@ using System.Text.Json.Serialization;
 namespace GitIgnore;
 
 #pragma warning disable CS9113 // Parameter is unread.
+public partial class Query(IServiceProvider services)
+#pragma warning restore CS9113 // Parameter is unread.
+{
+    public JsonNode Resolve(
+        IReadOnlyDictionary<string, object?> variables,
+        IEnumerable<IGraphQLSelection> selections
+    )
+    {
+        var jsonNode = new JsonObject();
+
+        foreach (var selection in selections)
+        {
+            if (selection is GraphQLFieldSelection fieldSelection)
+            {
+                if (fieldSelection.Name == "hasIgnoreFile")
+                {
+                    string? folder = null;
+
+                    foreach (var arg in fieldSelection.Arguments)
+                    {
+                        if (arg.Name == "folder")
+                        {
+                            if (arg.Value is GraphQLStringValue graphqlString)
+                            {
+                                folder = graphqlString.Value;
+                            }
+                            else if (arg.Value is GraphQLNullValue)
+                            {
+                                folder = null;
+                            }
+                            else if (arg.Value is GraphQLVariableValue graphqlVariable)
+                            {
+                                if (!variables.TryGetValue(graphqlVariable.Name, out var result))
+                                {
+                                    throw new ArgumentException(
+                                        $"{graphqlVariable.Name} is not specified"
+                                    );
+                                }
+                                folder = (string?)result;
+                            }
+                        }
+                    }
+                    jsonNode[fieldSelection.Alias ?? fieldSelection.Name] = GetHasIgnoreFile(
+                        folder
+                    );
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        return jsonNode;
+    }
+
+    public partial bool GetHasIgnoreFile(string? folder);
+}
+
+#pragma warning disable CS9113 // Parameter is unread.
 public partial class Mutation(IServiceProvider services)
 #pragma warning restore CS9113 // Parameter is unread.
 {
@@ -143,6 +203,14 @@ public partial class GraphQLServer(IServiceProvider services)
 
         if (parsedRequest is not null)
         {
+            if (parsedRequest.Query.Operation.OperationType == GraphQLOperationType.Query)
+            {
+                var obj = new Query(services);
+                jsonNode = obj.Resolve(
+                    parsedRequest.Variables ?? new(),
+                    parsedRequest.Query.Operation.Selections
+                );
+            }
             if (parsedRequest.Query.Operation.OperationType == GraphQLOperationType.Mutation)
             {
                 var obj = new Mutation(services);
