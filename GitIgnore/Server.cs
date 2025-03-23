@@ -134,6 +134,8 @@ public partial class GraphQLServer(IServiceProvider services)
     )]
     public string ProcessGraphQLRequest(string request)
     {
+        var parsedRequest = GraphQLRequest.FromJsonString(request);
+
         JsonNode? jsonNode = null;
         var errors = new JsonArray();
 
