@@ -62,6 +62,7 @@ public class Exports
         graphQLClient.MarkAsReady(Process.GetCurrentProcess().Id, providedUrl);
 
         var result = RunBot(graphQLClient, null);
+        return result;
     }
 
     [UnmanagedCallersOnly(EntryPoint = "stop_running")]
