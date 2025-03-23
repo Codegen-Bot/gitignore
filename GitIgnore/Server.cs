@@ -139,13 +139,20 @@ public partial class GraphQLServer
         JsonNode? jsonNode = null;
         var errors = new JsonArray();
 
-        if (parsedRequest.Query.Operation.OperationType == GraphQLOperationType.Mutation)
+        if (parsedRequest is not null)
         {
-            var obj = new Mutation();
-            jsonNode = obj.Resolve(
-                parsedRequest.Variables,
-                parsedRequest.Query.Operation.Selections
-            );
+            if (parsedRequest.Query.Operation.OperationType == GraphQLOperationType.Mutation)
+            {
+                var obj = new Mutation();
+                jsonNode = obj.Resolve(
+                    parsedRequest.Variables,
+                    parsedRequest.Query.Operation.Selections
+                );
+            }
+        }
+        else
+        {
+            errors.Add("Failed to parse request");
         }
 
         if (jsonNode is null)
