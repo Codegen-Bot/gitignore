@@ -41,7 +41,17 @@ public class Exports
 
         _app = builder.Build();
 
-        _app.MapPost("/graphql", async (HttpContext context) => HandleRequest());
+        _app.MapPost(
+            "/graphql",
+            async (HttpContext context) =>
+            {
+                using var reader = new StreamReader(context.Request.Body);
+                var content = await reader.ReadToEndAsync();
+                var response = ProcessGraphQLRequest(content);
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync(response);
+            }
+        );
 
         _app.Run(_cts.Token);
 
