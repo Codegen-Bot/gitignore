@@ -27,7 +27,21 @@ public partial class Mutation
 
                     foreach (var arg in fieldSelection.Arguments)
                     {
-                        if (arg.Name == "folder") { }
+                        if (arg.Name == "folder")
+                        {
+                            if (arg.Value is GraphQLStringValue graphqlString)
+                            {
+                                folder = graphqlString.Value;
+                            }
+                            else if (arg.Value is GraphQLNullValue)
+                            {
+                                folder = null;
+                            }
+                            else if (arg.Value is GraphQLVariableValue graphqlVariable)
+                            {
+                                folder = (string?)variables[graphqlVariable.Name];
+                            }
+                        }
                         if (arg.Name == "pattern")
                         {
                             if (arg.Value is GraphQLStringValue graphqlString)
