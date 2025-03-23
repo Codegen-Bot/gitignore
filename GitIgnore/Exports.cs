@@ -69,6 +69,7 @@ public class Exports
     public static int StopRunning()
     {
         _app?.Lifetime.StopApplication();
+        return 0;
     }
 
     private static GraphQLServer? _graphqlServer;
@@ -177,7 +178,7 @@ public class Exports
             {
                 var services = new ServiceCollection();
                 services.AddSingleton<ListOfGitIgnoreFiles>();
-                services.AddSingleton<IGraphQLClient>(graphQLClient);
+                services.AddSingleton<IGraphQLClient>(graphqlClient);
 
                 var serviceProvider = services.BuildServiceProvider();
                 _graphqlServer = new GraphQLServer(serviceProvider);
@@ -187,29 +188,12 @@ public class Exports
         }
         catch (Exception e)
         {
-            if (imports is not null)
-            {
-                imports.Log(
-                    new LogEvent()
-                    {
-                        Level = LogEventLevel.Critical,
-                        Message =
-                            "Bot failed to run handle GraphQL request: {ExceptionType} {Message}, {StackTrace}",
-                        Args = [e.GetType().Name, e.Message, e.StackTrace ?? ""],
-                    }
-                );
-                Pdk.SetError($"{e.GetType()}: {e.Message} {e.StackTrace}");
-            }
-            else
-            {
-                graphQLClient.Log(
-                    // Only a critical error will cause codegen.bot to realize that the generated code should not be used
-                    LogSeverity.CRITICAL,
-                    "Bot failed to handle GraphQL request: {ExceptionType} {Message}, {StackTrace}",
-                    [e.GetType().Name, e.Message, e.StackTrace ?? ""]
-                );
-                Console.WriteLine($"{e.GetType()}: {e.Message}");
-            }
+            graphqlClient.Log(
+                // Only a critical error will cause codegen.bot to realize that the generated code should not be used
+                LogSeverity.CRITICAL,
+                "Bot failed to handle GraphQL request: {ExceptionType} {Message}, {StackTrace}",
+                [e.GetType().Name, e.Message, e.StackTrace ?? ""]
+            );
             return "";
         }
     }
