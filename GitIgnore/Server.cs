@@ -87,7 +87,7 @@ public partial class Mutation(IServiceProvider services)
         return jsonNode;
     }
 
-    public partial string GetAddIgnorePattern(string? folder, string pattern);
+    public partial bool GetAddIgnorePattern(string? folder, string pattern);
 }
 
 public class GraphQLRequest
