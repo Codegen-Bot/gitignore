@@ -28,7 +28,7 @@ public class Exports
 {
     private static SimpleGraphQLServer? _server;
 
-    public static int Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
         var consumedUrl = BotDebugUtility.FindBotDebugUrl(Environment.CurrentDirectory);
         var httpClient = new HttpClient() { BaseAddress = new Uri(consumedUrl) };
