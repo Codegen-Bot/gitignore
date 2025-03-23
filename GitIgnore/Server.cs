@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -44,6 +45,11 @@ public class ParsedGraphQLOperation
 
 public partial class GraphQLServer
 {
+    [UnconditionalSuppressMessage(
+        "Trimming",
+        "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code",
+        Justification = "<Pending>"
+    )]
     public string ProcessGraphQLRequest(string request)
     {
         var parsedRequest = GraphQLRequest.FromJsonString(request);
