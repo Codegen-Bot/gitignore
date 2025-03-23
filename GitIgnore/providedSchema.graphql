@@ -2,3 +2,7 @@ schema {
   query: Query
   mutation: Mutation
 }
+
+type Mutation {
+  addIgnorePattern(folder: String pattern: String!): String!
+}
