@@ -97,7 +97,7 @@ public class GraphQLRequest
     public string? OperationName { get; set; }
 
     [JsonPropertyName("variables")]
-    public Dictionary<string, object>? Variables { get; set; }
+    public Dictionary<string, object?>? Variables { get; set; }
 
     public static GraphQLRequest? FromJsonString(string requestBody)
     {
@@ -145,7 +145,7 @@ public partial class GraphQLServer
             {
                 var obj = new Mutation();
                 jsonNode = obj.Resolve(
-                    parsedRequest.Variables,
+                    parsedRequest.Variables ?? new(),
                     parsedRequest.Query.Operation.Selections
                 );
             }
