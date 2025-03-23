@@ -15,7 +15,7 @@ tags:
 private: 
 exec:
   devenv: dotnet workload install wasi-experimental
-  build: dotnet build -c Release -r wasi-wasm /p:UsingMicrosoftNETSdkWeb=false
+  build: dotnet build -c Release -r wasi-wasm
   build-docker: docker run -v .:/src codegenbot/dotnet-bot-builder:net8.0
   run: dotnet run
   
