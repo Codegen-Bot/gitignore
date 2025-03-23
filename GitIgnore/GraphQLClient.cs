@@ -375,36 +375,6 @@ public partial class WasmGraphQLClient(ICodegenBotImports imports) : IGraphQLCli
         return result?.Data
             ?? throw new InvalidOperationException("Received null data for request Log.");
     }
-
-    public GetConfigurationData GetConfiguration()
-    {
-        var request = new GraphQLRequest<GetConfigurationVariables>
-        {
-            Query = """
-                query GetConfiguration {
-                  configuration {
-                    outputPath
-                  }
-                }
-                """,
-            OperationName = "GetConfiguration",
-            Variables = new GetConfigurationVariables() { },
-        };
-
-        var response = imports.GraphQL(
-            request,
-            GraphQLClientJsonSerializerContext.Default.GraphQLRequestGetConfigurationVariables
-        );
-        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
-        var result = JsonSerializer.Deserialize<GraphQLResponse<GetConfigurationData>>(
-            response,
-            GraphQLClientJsonSerializerContext.Default.GraphQLResponseGetConfigurationData
-        );
-        return result?.Data
-            ?? throw new InvalidOperationException(
-                "Received null data for request GetConfiguration."
-            );
-    }
 }
 
 public partial class SyncHttpGraphQLClient(HttpClient httpClient, string uri) : IGraphQLClient
@@ -863,46 +833,6 @@ public partial class SyncHttpGraphQLClient(HttpClient httpClient, string uri) : 
         return result?.Data
             ?? throw new InvalidOperationException("Received null data for request Log.");
     }
-
-    public GetConfigurationData GetConfiguration()
-    {
-        var request = new GraphQLRequest<GetConfigurationVariables>
-        {
-            Query = """
-                query GetConfiguration {
-                  configuration {
-                    outputPath
-                  }
-                }
-                """,
-            OperationName = "GetConfiguration",
-            Variables = new GetConfigurationVariables() { },
-        };
-
-        HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, uri)
-        {
-            Version = HttpVersion.Version11,
-            VersionPolicy = HttpVersionPolicy.RequestVersionOrLower,
-        };
-        requestMessage.Content = JsonContent.Create(
-            request,
-            GraphQLClientJsonSerializerContext.Default.GraphQLRequestGetConfigurationVariables
-        );
-        var responseMessage = httpClient.Send(requestMessage);
-        var responseStream = responseMessage.Content.ReadAsStream();
-        using var reader = new StreamReader(responseStream);
-        var response = reader.ReadToEnd();
-
-        response = JsonUtility.EnsureTypeDiscriminatorPropertiesComeFirst(response);
-        var result = JsonSerializer.Deserialize<GraphQLResponse<GetConfigurationData>>(
-            response,
-            GraphQLClientJsonSerializerContext.Default.GraphQLResponseGetConfigurationData
-        );
-        return result?.Data
-            ?? throw new InvalidOperationException(
-                "Received null data for request GetConfiguration."
-            );
-    }
 }
 
 public partial interface IGraphQLClient
@@ -935,8 +865,6 @@ public partial interface IGraphQLClient
     );
 
     LogData Log(LogSeverity severity, string message, IReadOnlyList<string> arguments);
-
-    GetConfigurationData GetConfiguration();
 }
 
 [JsonSerializable(typeof(GraphQLRequest<MarkAsReadyVariables>))]
@@ -980,10 +908,6 @@ public partial interface IGraphQLClient
 [JsonSerializable(typeof(GraphQLRequest<LogVariables>))]
 [JsonSerializable(typeof(GraphQLResponse<LogData>))]
 [JsonSerializable(typeof(LogData))]
-[JsonSerializable(typeof(GraphQLRequest<GetConfigurationVariables>))]
-[JsonSerializable(typeof(GraphQLResponse<GetConfigurationData>))]
-[JsonSerializable(typeof(GetConfigurationData))]
-[JsonSerializable(typeof(GetConfigurationConfiguration))]
 [JsonSourceGenerationOptions(WriteIndented = true)]
 public partial class GraphQLClientJsonSerializerContext : JsonSerializerContext;
 
@@ -1255,18 +1179,4 @@ public partial class LogData
 {
     [JsonPropertyName("log")]
     public required string Log { get; set; }
-}
-
-public partial class GetConfigurationVariables { }
-
-public partial class GetConfigurationData
-{
-    [JsonPropertyName("configuration")]
-    public required GetConfigurationConfiguration Configuration { get; set; }
-}
-
-public partial class GetConfigurationConfiguration
-{
-    [JsonPropertyName("outputPath")]
-    public required string OutputPath { get; set; }
 }
