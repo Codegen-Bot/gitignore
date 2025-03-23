@@ -129,7 +129,7 @@ public class Exports
     public static int HandleRequest()
     {
         var imports = new CodegenBotImports();
-        var graphQLClient = new GraphQLClient(imports);
+        var graphQLClient = new WasmGraphQLClient(imports);
 
         try
         {
