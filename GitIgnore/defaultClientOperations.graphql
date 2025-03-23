@@ -1,5 +1,5 @@
-query MarkAsReady($processId: Int!) {
-  markAsReady(processId: $processId)
+query MarkAsReady($processId: Int!, $providedApiUrl: String!) {
+  markAsReady(processId: $processId, providedApiUrl: $providedApiUrl)
 }
 
 query GetFiles($whitelist: [String!]!, $blacklist: [String!]!) {
