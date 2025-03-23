@@ -43,9 +43,9 @@ public class Exports
 
         _app.MapPost("/graphql", async (HttpContext context) => HandleRequest());
 
-        _app.Run(_cts);
+        _app.Run(_cts.Token);
 
-        var server = app.Services.GetRequiredService<IServer>();
+        var server = _app.Services.GetRequiredService<IServer>();
         var addressFeature = server.Features.Get<IServerAddressesFeature>();
         var providedUrl = addressFeature!.Addresses.First();
 
@@ -54,7 +54,7 @@ public class Exports
         var result = RunBot(graphQLClient, null);
     }
 
-    private CancellationTokenSource _cts = new();
+    private static CancellationTokenSource _cts = new();
 
     [UnmanagedCallersOnly(EntryPoint = "stop_running")]
     public static int StopRunning()
