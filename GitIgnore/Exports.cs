@@ -27,7 +27,7 @@ public class Exports
         var httpClient = new HttpClient() { BaseAddress = new Uri(consumedUrl) };
         var graphQLClient = new SyncHttpGraphQLClient(httpClient, consumedUrl);
 
-        _server = new SimpleGraphQLServer(ProcessGraphQLRequest);
+        _server = new SimpleGraphQLServer(request => ProcessGraphQLRequest(request, graphQLClient));
 
         // Start the server and get the URL
         var serverTask = _server.StartAsync();
