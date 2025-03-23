@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace GitIgnore;
 
-public partial class Mutation
+public partial class Mutation(IServiceProvider services)
 {
     public JsonNode Resolve(
         IReadOnlyDictionary<string, object?> variables,
@@ -125,7 +125,7 @@ public class ParsedGraphQLOperation
     public List<GraphQLFragment> Fragments { get; set; } = new();
 }
 
-public partial class GraphQLServer
+public partial class GraphQLServer(IServiceProvider services)
 {
     [UnconditionalSuppressMessage(
         "Trimming",
@@ -134,8 +134,6 @@ public partial class GraphQLServer
     )]
     public string ProcessGraphQLRequest(string request)
     {
-        var parsedRequest = GraphQLRequest.FromJsonString(request);
-
         JsonNode? jsonNode = null;
         var errors = new JsonArray();
 
@@ -143,7 +141,7 @@ public partial class GraphQLServer
         {
             if (parsedRequest.Query.Operation.OperationType == GraphQLOperationType.Mutation)
             {
-                var obj = new Mutation();
+                var obj = new Mutation(services);
                 jsonNode = obj.Resolve(
                     parsedRequest.Variables ?? new(),
                     parsedRequest.Query.Operation.Selections
