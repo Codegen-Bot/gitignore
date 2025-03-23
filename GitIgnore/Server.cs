@@ -66,7 +66,7 @@ public partial class GraphQLServer
         result["errors"] = errors;
         result["data"] = jsonNode;
 
-        var resultJson = result?.ToJsonString();
+        var resultJson = result.ToJsonString();
         return resultJson;
     }
 }
