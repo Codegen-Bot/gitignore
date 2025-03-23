@@ -2,51 +2,78 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GitIgnore;
 
 public class SimpleGraphQLServer
 {
-    private readonly int _port;
     private readonly Func<string, string> _processGraphQLRequest;
+    private TcpListener _listener;
+    private CancellationTokenSource _cts;
 
-    public SimpleGraphQLServer(int port, Func<string, string> processGraphQLRequest)
+    public string Url { get; private set; }
+
+    public SimpleGraphQLServer(Func<string, string> processGraphQLRequest)
     {
-        _port = port;
         _processGraphQLRequest = processGraphQLRequest;
     }
 
-    public async Task StartAsync()
+    public async Task StartAsync(CancellationToken cancellationToken = default)
     {
-        TcpListener listener = new TcpListener(IPAddress.Any, _port);
-        listener.Start();
-        Console.WriteLine($"GraphQL Server started on port {_port}");
+        _listener = new TcpListener(IPAddress.Loopback, 0);
+        _listener.Start();
+        var port = ((IPEndPoint)_listener.LocalEndpoint).Port;
+        Url = $"http://localhost:{port}";
+        Console.WriteLine($"GraphQL Server started at {Url}");
 
-        while (true)
+        _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+        try
         {
-            using var client = await listener.AcceptTcpClientAsync();
-            await HandleClientAsync(client);
+            while (!_cts.Token.IsCancellationRequested)
+            {
+                var client = await _listener.AcceptTcpClientAsync(_cts.Token);
+                _ = HandleClientAsync(client); // Fire and forget
+            }
         }
+        catch (OperationCanceledException)
+        {
+            // Server was stopped
+        }
+        finally
+        {
+            _listener.Stop();
+        }
+    }
+
+    public void Stop()
+    {
+        _cts?.Cancel();
+        _listener?.Stop();
     }
 
     private async Task HandleClientAsync(TcpClient client)
     {
-        using var stream = client.GetStream();
-        var buffer = new byte[1024];
-        var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
-        var request = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+        using (client)
+        using (var stream = client.GetStream())
+        {
+            var buffer = new byte[1024];
+            var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+            var request = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 
-        if (request.StartsWith("POST /graphql"))
-        {
-            var contentLength = GetContentLength(request);
-            var content = await ReadRequestBodyAsync(stream, contentLength);
-            var graphqlResponse = _processGraphQLRequest(content);
-            await SendResponseAsync(stream, "200 OK", "application/json", graphqlResponse);
-        }
-        else
-        {
-            await SendResponseAsync(stream, "404 Not Found", "text/plain", "Not Found");
+            if (request.StartsWith("POST /graphql"))
+            {
+                var contentLength = GetContentLength(request);
+                var content = await ReadRequestBodyAsync(stream, contentLength);
+                var graphqlResponse = _processGraphQLRequest(content);
+                await SendResponseAsync(stream, "200 OK", "application/json", graphqlResponse);
+            }
+            else
+            {
+                await SendResponseAsync(stream, "404 Not Found", "text/plain", "Not Found");
+            }
         }
     }
 
