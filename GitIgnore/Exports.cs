@@ -25,7 +25,7 @@ namespace GitIgnore;
 /// </summary>
 public class Exports
 {
-    private static WebApplication? _app;
+    private static SimpleGraphQLServer? _server;
 
     public static int Main(string[] args)
     {
@@ -33,33 +33,37 @@ public class Exports
         var httpClient = new HttpClient() { BaseAddress = new Uri(consumedUrl) };
         var graphQLClient = new SyncHttpGraphQLClient(httpClient, consumedUrl);
 
-        var builder = WebApplication.CreateBuilder([]);
+        _server = new SimpleGraphQLServer(ProcessGraphQLRequest);
 
-        builder.WebHost.UseUrls($"http://127.0.0.1:0");
+        // Start the server and get the URL
+        var serverTask = _server.StartAsync();
+        await Task.Delay(100); // Give it a moment to start and get the URL
 
-        builder.Logging.ClearProviders();
+        Console.WriteLine($"Server is running at {_server.Url}");
+        Console.WriteLine("Press Ctrl+C to stop the server");
+        graphQLClient.MarkAsReady(Process.GetCurrentProcess().Id, _server.Url);
 
-        _app = builder.Build();
+        // Set up cancellation on Ctrl+C
+        var cts = new CancellationTokenSource();
+        Console.CancelKeyPress += (s, e) =>
+        {
+            e.Cancel = true;
+            cts.Cancel();
+        };
 
-        _app.MapPost(
-            "/graphql",
-            async (HttpContext context) =>
-            {
-                using var reader = new StreamReader(context.Request.Body);
-                var content = await reader.ReadToEndAsync();
-                var response = ProcessGraphQLRequest(content, graphQLClient);
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsync(response);
-            }
-        );
-
-        _app.Start();
-
-        var server = _app.Services.GetRequiredService<IServer>();
-        var addressFeature = server.Features.Get<IServerAddressesFeature>();
-        var providedUrl = addressFeature!.Addresses.First();
-
-        graphQLClient.MarkAsReady(Process.GetCurrentProcess().Id, providedUrl);
+        try
+        {
+            // Wait for the server to complete or for cancellation
+            await serverTask;
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("Server is shutting down...");
+        }
+        finally
+        {
+            _server.Stop();
+        }
 
         var result = RunBot(graphQLClient, null);
         return result;
@@ -68,7 +72,8 @@ public class Exports
     [UnmanagedCallersOnly(EntryPoint = "stop_running")]
     public static int StopRunning()
     {
-        _app?.Lifetime.StopApplication();
+        // This only gets called when running in WebAssembly, so no need to call _server.Stop() from here
+        // because _server is only non-null when running as a separate process.
         return 0;
     }
 
