@@ -10,10 +10,10 @@ namespace GitIgnore;
 public class SimpleGraphQLServer
 {
     private readonly Func<string, string> _processGraphQLRequest;
-    private TcpListener _listener;
-    private CancellationTokenSource _cts;
+    private TcpListener? _listener;
+    private CancellationTokenSource? _cts;
 
-    public string Url { get; private set; }
+    public string? Url { get; private set; }
 
     public SimpleGraphQLServer(Func<string, string> processGraphQLRequest)
     {
