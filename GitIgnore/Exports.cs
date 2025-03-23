@@ -34,7 +34,7 @@ public class Exports
         do
         {
             await Task.Delay(100); // Give it a moment to start and get the URL
-        } while (server.Url is null);
+        } while (_server.Url is null);
 
         Console.WriteLine($"Server is running at {_server.Url}");
         Console.WriteLine("Press Ctrl+C to stop the server");
