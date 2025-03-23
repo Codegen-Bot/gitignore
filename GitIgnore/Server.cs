@@ -6,6 +6,57 @@ using System.Text.Json.Serialization;
 
 namespace GitIgnore;
 
+public partial class Mutation
+{
+    public JsonNode Resolve(
+        IReadOnlyDictionary<string, object?> variables,
+        IEnumerable<IGraphQLSelection> selections
+    )
+    {
+        var jsonNode = new JsonObject();
+
+        foreach (var selection in selections)
+        {
+            if (selection is GraphQLFieldSelection fieldSelection)
+            {
+                if (fieldSelection.Name == "addIgnorePattern")
+                {
+                    string? folder = null;
+                    string? pattern = null;
+
+                    foreach (var arg in fieldSelection.Arguments)
+                    {
+                        if (arg.Name == "folder") { }
+                        if (arg.Name == "pattern")
+                        {
+                            if (arg.Value is GraphQLStringValue graphqlString)
+                            {
+                                pattern = graphqlString.Value;
+                            }
+                            else if (arg.Value is GraphQLVariableValue graphqlVariable)
+                            {
+                                pattern = (string)variables[graphqlVariable.Name];
+                            }
+                        }
+                    }
+                    jsonNode[fieldSelection.Alias ?? fieldSelection.Name] = GetAddIgnorePattern(
+                        folder,
+                        pattern
+                    );
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        return jsonNode;
+    }
+
+    public partial string GetAddIgnorePattern(string? folder, string pattern);
+}
+
 public class GraphQLRequest
 {
     [JsonPropertyName("query")]
@@ -56,6 +107,15 @@ public partial class GraphQLServer
 
         JsonNode? jsonNode = null;
         var errors = new JsonArray();
+
+        if (parsedRequest.Query.Operation.OperationType == GraphQLOperationType.Mutation)
+        {
+            var obj = new Mutation();
+            jsonNode = obj.Resolve(
+                parsedRequest.Variables,
+                parsedRequest.Query.Operation.Selections
+            );
+        }
 
         if (jsonNode is null)
         {
