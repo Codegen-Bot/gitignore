@@ -25,7 +25,7 @@ namespace GitIgnore;
 /// </summary>
 public class Exports
 {
-    private static IApplication _app;
+    private static WebApplication _app;
 
     public static int Main(string[] args)
     {
