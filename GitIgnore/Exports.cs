@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using CodegenBot;
 using Extism;
 using Microsoft.AspNetCore.Builder;
