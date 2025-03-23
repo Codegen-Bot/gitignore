@@ -47,7 +47,7 @@ public class Exports
             {
                 using var reader = new StreamReader(context.Request.Body);
                 var content = await reader.ReadToEndAsync();
-                var response = ProcessGraphQLRequest(content);
+                var response = ProcessGraphQLRequest(content, graphQLClient);
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsync(response);
             }
