@@ -4,10 +4,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GitIgnore;
 
+#pragma warning disable CS9113 // Parameter is unread.
 public partial class Mutation(IServiceProvider services)
+#pragma warning restore CS9113 // Parameter is unread.
 {
     public JsonNode Resolve(
         IReadOnlyDictionary<string, object?> variables,
