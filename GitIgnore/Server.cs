@@ -72,7 +72,7 @@ public partial class Mutation
                     }
                     jsonNode[fieldSelection.Alias ?? fieldSelection.Name] = GetAddIgnorePattern(
                         folder,
-                        pattern
+                        pattern ?? throw new ArgumentNullException("pattern is null")
                     );
                 }
             }
