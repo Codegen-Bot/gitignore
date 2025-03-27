@@ -3,5 +3,5 @@
 **/.idea
 *.wasm
 *.sln.DotSettings.user
-botdebugurl.txt
+botdebug.json
 
