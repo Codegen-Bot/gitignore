@@ -13,7 +13,7 @@ public partial class Query(IServiceProvider services)
 {
     public JsonNode Resolve(
         IReadOnlyDictionary<string, object?> variables,
-        IEnumerable<IGraphQLSelection> selections
+        IEnumerable<IPreParsedGraphQLSelection> selections
     )
     {
         var jsonNode = new JsonObject();
@@ -73,7 +73,7 @@ public partial class Mutation(IServiceProvider services)
 {
     public JsonNode Resolve(
         IReadOnlyDictionary<string, object?> variables,
-        IEnumerable<IGraphQLSelection> selections
+        IEnumerable<IPreParsedGraphQLSelection> selections
     )
     {
         var jsonNode = new JsonObject();
