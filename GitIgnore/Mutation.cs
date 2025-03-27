@@ -8,7 +8,7 @@ public partial class Mutation
     private readonly IGraphQLClient _graphqlClient = services.GetRequiredService<IGraphQLClient>();
     private readonly ListOfGitIgnoreFiles _listOfGitIgnoreFiles = services.GetRequiredService<ListOfGitIgnoreFiles>();
     
-    public partial bool GetAddIgnorePattern(string? folder, string pattern)
+    public partial bool AddIgnorePattern(string? folder, string pattern)
     {
         folder ??= "";
         var addedGitIgnoreFile = false;
