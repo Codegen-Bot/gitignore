@@ -23,7 +23,8 @@ public class Exports
 
     public static async Task<int> Main(string[] args)
     {
-        var consumedUrl = BotDebugUtility.FindBotDebugUrl(Environment.CurrentDirectory);
+        var botDebug = BotDebugUtility.FindBotDebugUrl(Environment.CurrentDirectory);
+        var consumedUrl = botDebug.ConsumeGraphQLUrl;
         var httpClient = new HttpClient() { BaseAddress = new Uri(consumedUrl) };
         var graphQLClient = new SyncHttpGraphQLClient(httpClient, consumedUrl);
 
