@@ -1,4 +1,4 @@
-query MarkAsReady($processId: Int!, $providedApiUrl: String!) {
+query MarkAsReady($processId: Int!, $providedApiUrl: String) {
   markAsReady(processId: $processId, providedApiUrl: $providedApiUrl)
 }
 

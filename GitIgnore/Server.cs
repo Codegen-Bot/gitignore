@@ -133,7 +133,7 @@ public partial class Mutation(IServiceProvider services)
                             }
                         }
                     }
-                    jsonNode[fieldSelection.Alias ?? fieldSelection.Name] = GetAddIgnorePattern(
+                    jsonNode[fieldSelection.Alias ?? fieldSelection.Name] = AddIgnorePattern(
                         folder,
                         pattern ?? throw new ArgumentNullException("pattern is null")
                     );
@@ -148,10 +148,12 @@ public partial class Mutation(IServiceProvider services)
         return jsonNode;
     }
 
-    public partial bool GetAddIgnorePattern(string? folder, string pattern);
+    public partial bool AddIgnorePattern(string? folder, string pattern);
 }
 
+#pragma warning disable CS9113 // Parameter is unread.
 public partial class GraphQLServer(IServiceProvider services)
+#pragma warning restore CS9113 // Parameter is unread.
 {
     [UnconditionalSuppressMessage(
         "Trimming",
