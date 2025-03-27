@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using CodegenBot;
 
 namespace GitIgnore;
 
@@ -20,7 +21,7 @@ public partial class Query(IServiceProvider services)
 
         foreach (var selection in selections)
         {
-            if (selection is GraphQLFieldSelection fieldSelection)
+            if (selection is PreParsedGraphQLFieldSelection fieldSelection)
             {
                 if (fieldSelection.Name == "hasIgnoreFile")
                 {
@@ -30,15 +31,15 @@ public partial class Query(IServiceProvider services)
                     {
                         if (arg.Name == "folder")
                         {
-                            if (arg.Value is GraphQLStringValue graphqlString)
+                            if (arg.Value is PreParsedGraphQLStringValue graphqlString)
                             {
                                 folder = graphqlString.Value;
                             }
-                            else if (arg.Value is GraphQLNullValue)
+                            else if (arg.Value is PreParsedGraphQLNullValue)
                             {
                                 folder = null;
                             }
-                            else if (arg.Value is GraphQLVariableValue graphqlVariable)
+                            else if (arg.Value is PreParsedGraphQLVariableValue graphqlVariable)
                             {
                                 if (!variables.TryGetValue(graphqlVariable.Name, out var result))
                                 {
@@ -80,7 +81,7 @@ public partial class Mutation(IServiceProvider services)
 
         foreach (var selection in selections)
         {
-            if (selection is GraphQLFieldSelection fieldSelection)
+            if (selection is PreParsedGraphQLFieldSelection fieldSelection)
             {
                 if (fieldSelection.Name == "addIgnorePattern")
                 {
@@ -91,15 +92,15 @@ public partial class Mutation(IServiceProvider services)
                     {
                         if (arg.Name == "folder")
                         {
-                            if (arg.Value is GraphQLStringValue graphqlString)
+                            if (arg.Value is PreParsedGraphQLStringValue graphqlString)
                             {
                                 folder = graphqlString.Value;
                             }
-                            else if (arg.Value is GraphQLNullValue)
+                            else if (arg.Value is PreParsedGraphQLNullValue)
                             {
                                 folder = null;
                             }
-                            else if (arg.Value is GraphQLVariableValue graphqlVariable)
+                            else if (arg.Value is PreParsedGraphQLVariableValue graphqlVariable)
                             {
                                 if (!variables.TryGetValue(graphqlVariable.Name, out var result))
                                 {
@@ -112,11 +113,11 @@ public partial class Mutation(IServiceProvider services)
                         }
                         if (arg.Name == "pattern")
                         {
-                            if (arg.Value is GraphQLStringValue graphqlString)
+                            if (arg.Value is PreParsedGraphQLStringValue graphqlString)
                             {
                                 pattern = graphqlString.Value;
                             }
-                            else if (arg.Value is GraphQLVariableValue graphqlVariable)
+                            else if (arg.Value is PreParsedGraphQLVariableValue graphqlVariable)
                             {
                                 if (!variables.TryGetValue(graphqlVariable.Name, out var result))
                                 {
@@ -166,7 +167,7 @@ public partial class GraphQLServer(IServiceProvider services)
 
         if (parsedRequest is not null)
         {
-            if (parsedRequest.Query.Operation.OperationType == GraphQLOperationType.Query)
+            if (parsedRequest.Query.Operation.OperationType == PreParsedGraphQLOperationType.Query)
             {
                 var obj = new Query(services);
                 jsonNode = obj.Resolve(
@@ -174,7 +175,10 @@ public partial class GraphQLServer(IServiceProvider services)
                     parsedRequest.Query.Operation.Selections
                 );
             }
-            if (parsedRequest.Query.Operation.OperationType == GraphQLOperationType.Mutation)
+            if (
+                parsedRequest.Query.Operation.OperationType
+                == PreParsedGraphQLOperationType.Mutation
+            )
             {
                 var obj = new Mutation(services);
                 jsonNode = obj.Resolve(
