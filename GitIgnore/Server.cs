@@ -47,7 +47,7 @@ public partial class Query(IServiceProvider services)
                                         $"{graphqlVariable.Name} is not specified"
                                     );
                                 }
-                                folder = (string?)result;
+                                folder = ((JsonElement?)result)?.GetString();
                             }
                         }
                     }
@@ -108,7 +108,7 @@ public partial class Mutation(IServiceProvider services)
                                         $"{graphqlVariable.Name} is not specified"
                                     );
                                 }
-                                folder = (string?)result;
+                                folder = ((JsonElement?)result)?.GetString();
                             }
                         }
                         if (arg.Name == "pattern")
@@ -129,7 +129,7 @@ public partial class Mutation(IServiceProvider services)
                                 {
                                     throw new ArgumentNullException("pattern is null");
                                 }
-                                pattern = (string)result;
+                                pattern = ((JsonElement)result).GetString();
                             }
                         }
                     }
