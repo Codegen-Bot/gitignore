@@ -31,12 +31,12 @@ public partial class GraphQLError
 
 public partial class WasmGraphQLClient(ICodegenBotImports imports) : IGraphQLClient
 {
-    public MarkAsReadyData MarkAsReady(int processId, string providedApiUrl)
+    public MarkAsReadyData MarkAsReady(int processId, string? providedApiUrl)
     {
         var request = new GraphQLRequest<MarkAsReadyVariables>
         {
             Query = """
-                query MarkAsReady($processId: Int!, $providedApiUrl: String!) {
+                query MarkAsReady($processId: Int!, $providedApiUrl: String) {
                   markAsReady(processId: $processId, providedApiUrl: $providedApiUrl)
                 }
                 """,
@@ -383,12 +383,12 @@ public partial class WasmGraphQLClient(ICodegenBotImports imports) : IGraphQLCli
 
 public partial class SyncHttpGraphQLClient(HttpClient httpClient, string uri) : IGraphQLClient
 {
-    public MarkAsReadyData MarkAsReady(int processId, string providedApiUrl)
+    public MarkAsReadyData MarkAsReady(int processId, string? providedApiUrl)
     {
         var request = new GraphQLRequest<MarkAsReadyVariables>
         {
             Query = """
-                query MarkAsReady($processId: Int!, $providedApiUrl: String!) {
+                query MarkAsReady($processId: Int!, $providedApiUrl: String) {
                   markAsReady(processId: $processId, providedApiUrl: $providedApiUrl)
                 }
                 """,
@@ -845,7 +845,7 @@ public partial class SyncHttpGraphQLClient(HttpClient httpClient, string uri) : 
 
 public partial interface IGraphQLClient
 {
-    MarkAsReadyData MarkAsReady(int processId, string providedApiUrl);
+    MarkAsReadyData MarkAsReady(int processId, string? providedApiUrl);
 
     GetFilesData GetFiles(IReadOnlyList<string> whitelist, IReadOnlyList<string> blacklist);
 
@@ -976,7 +976,7 @@ public partial class MarkAsReadyVariables
     public required int ProcessId { get; set; }
 
     [JsonPropertyName("providedApiUrl")]
-    public required string ProvidedApiUrl { get; set; }
+    public required string? ProvidedApiUrl { get; set; }
 }
 
 public partial class MarkAsReadyData
