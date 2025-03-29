@@ -31,9 +31,9 @@ public partial class Query(IServiceProvider services)
                     {
                         if (arg.Name == "folder")
                         {
-                            if (arg.Value is PreParsedGraphQLStringValue graphqlString)
+                            if (arg.Value is PreParsedGraphQLStringValue literal)
                             {
-                                folder = graphqlString.Value;
+                                folder = literal.Value;
                             }
                             else if (arg.Value is PreParsedGraphQLNullValue)
                             {
@@ -48,6 +48,10 @@ public partial class Query(IServiceProvider services)
                                     );
                                 }
                                 folder = ((JsonElement?)result)?.GetString();
+                            }
+                            else
+                            {
+                                throw new ArgumentException("folder is not specified");
                             }
                         }
                     }
@@ -92,9 +96,9 @@ public partial class Mutation(IServiceProvider services)
                     {
                         if (arg.Name == "folder")
                         {
-                            if (arg.Value is PreParsedGraphQLStringValue graphqlString)
+                            if (arg.Value is PreParsedGraphQLStringValue literal)
                             {
-                                folder = graphqlString.Value;
+                                folder = literal.Value;
                             }
                             else if (arg.Value is PreParsedGraphQLNullValue)
                             {
@@ -110,12 +114,16 @@ public partial class Mutation(IServiceProvider services)
                                 }
                                 folder = ((JsonElement?)result)?.GetString();
                             }
+                            else
+                            {
+                                throw new ArgumentException("folder is not specified");
+                            }
                         }
                         if (arg.Name == "pattern")
                         {
-                            if (arg.Value is PreParsedGraphQLStringValue graphqlString)
+                            if (arg.Value is PreParsedGraphQLStringValue literal)
                             {
-                                pattern = graphqlString.Value;
+                                pattern = literal.Value;
                             }
                             else if (arg.Value is PreParsedGraphQLVariableValue graphqlVariable)
                             {
