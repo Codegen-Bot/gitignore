@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CodegenBot;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +9,7 @@ public partial class Mutation
     private readonly IGraphQLClient _graphqlClient = services.GetRequiredService<IGraphQLClient>();
     private readonly ListOfGitIgnoreFiles _listOfGitIgnoreFiles = services.GetRequiredService<ListOfGitIgnoreFiles>();
     
-    public partial bool AddIgnorePattern(string? folder, string pattern)
+    public partial bool AddIgnorePattern(string? folder, IReadOnlyList<string> patterns)
     {
         folder ??= "";
         var addedGitIgnoreFile = false;
@@ -24,15 +25,19 @@ public partial class Mutation
                 """);
         }
 
-        if (!pattern.EndsWith("\n"))
+        foreach (var x in patterns)
         {
-            pattern = pattern + "\n";
-        }
+            var pattern = x;
+            if (!pattern.EndsWith("\n"))
+            {
+                pattern = pattern + "\n";
+            }
         
-        _graphqlClient.AddSimpleKeyedTextByTags([
-            new CaretTagInput() { Name = "location", Value = $"{folder}/.gitignore" },
-            new CaretTagInput() { Name = "filename", Value = ".gitignore" },
-        ], pattern);
+            _graphqlClient.AddSimpleKeyedTextByTags([
+                new CaretTagInput() { Name = "location", Value = $"{folder}/.gitignore" },
+                new CaretTagInput() { Name = "filename", Value = ".gitignore" },
+            ], pattern);
+        }
         
         return addedGitIgnoreFile;
     }
