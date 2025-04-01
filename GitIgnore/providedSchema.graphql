@@ -8,5 +8,5 @@ type Query {
 }
 
 type Mutation {
-  addIgnorePattern(folder: String pattern: [String!]!): Boolean!
+  addIgnorePattern(folder: String patterns: [String!]!): Boolean!
 }

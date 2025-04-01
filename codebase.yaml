@@ -28,14 +28,14 @@ pipelines:
         - botId: bot://core/ready
         - botId: bot://core/random
       - botId: bot://hub/.gitignore
-        botVersion: 0.0.1-alpha17
+        botVersion: 0.0.1-alpha20
         dependencies:
         - botId: bot://core/output
         - botId: bot://core/filesystem
         - botId: bot://core/log
         - botId: bot://core/ready
       - botId: bot://hub/dotnet/botfactory
-        botVersion: 0.0.1-alpha117
+        botVersion: 0.0.1-alpha122
         configuration:
           id: bot://hub/.gitignore
           language: CSHARP
