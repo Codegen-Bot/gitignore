@@ -91,7 +91,7 @@ public partial class Mutation(IServiceProvider services)
                 if (fieldSelection.Name == "addIgnorePattern")
                 {
                     string? folder = null;
-                    IReadOnlyList<string>? pattern = null;
+                    IReadOnlyList<string>? patterns = null;
 
                     foreach (var arg in fieldSelection.Arguments)
                     {
@@ -120,17 +120,17 @@ public partial class Mutation(IServiceProvider services)
                                 throw new ArgumentException("folder is not specified");
                             }
                         }
-                        if (arg.Name == "pattern")
+                        if (arg.Name == "patterns")
                         {
                             if (arg.Value is PreParsedGraphQLListValue literal)
                             {
-                                pattern = literal
+                                patterns = literal
                                     .Value.Select(x =>
                                     {
-                                        string? patternElement = null;
+                                        string? patternsElement = null;
                                         if (x is PreParsedGraphQLStringValue literal)
                                         {
-                                            patternElement = literal.Value;
+                                            patternsElement = literal.Value;
                                         }
                                         else if (x is PreParsedGraphQLVariableValue graphqlVariable)
                                         {
@@ -148,18 +148,18 @@ public partial class Mutation(IServiceProvider services)
                                             if (result is null)
                                             {
                                                 throw new ArgumentNullException(
-                                                    "patternElement is null"
+                                                    "patternsElement is null"
                                                 );
                                             }
-                                            patternElement = ((JsonElement)result).GetString();
+                                            patternsElement = ((JsonElement)result).GetString();
                                         }
-                                        if (patternElement is null)
+                                        if (patternsElement is null)
                                         {
                                             throw new ArgumentException(
-                                                "patternElement is not specified"
+                                                "patternsElement is not specified"
                                             );
                                         }
-                                        return patternElement;
+                                        return patternsElement;
                                     })
                                     .ToList();
                             }
@@ -173,9 +173,9 @@ public partial class Mutation(IServiceProvider services)
                                 }
                                 if (result is null)
                                 {
-                                    throw new ArgumentNullException("pattern is null");
+                                    throw new ArgumentNullException("patterns is null");
                                 }
-                                pattern = ((JsonElement)result)
+                                patterns = ((JsonElement)result)
                                     .EnumerateArray()
                                     .Select(x => x.GetString()!)
                                     .ToList();
@@ -184,7 +184,7 @@ public partial class Mutation(IServiceProvider services)
                     }
                     jsonNode[fieldSelection.Alias ?? fieldSelection.Name] = AddIgnorePattern(
                         folder,
-                        pattern ?? throw new ArgumentNullException("pattern is null")
+                        patterns ?? throw new ArgumentNullException("patterns is null")
                     );
                 }
             }
@@ -197,7 +197,7 @@ public partial class Mutation(IServiceProvider services)
         return jsonNode;
     }
 
-    public partial bool AddIgnorePattern(string? folder, IReadOnlyList<string> pattern);
+    public partial bool AddIgnorePattern(string? folder, IReadOnlyList<string> patterns);
 }
 
 #pragma warning disable CS9113 // Parameter is unread.
